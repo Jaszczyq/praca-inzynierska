@@ -4,6 +4,7 @@ use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +31,13 @@ Route::resource('events', EventController::class);
 Route::middleware(['can:isOrganizer'])->group(function () {
     Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
 });
+
+Route::get('/event/{id}', 'EventController@details')->name('event.details');
+
+Route::get('/events/search/{name}', 'EventController@search')->name('event.search');
+
+
+
     // Trasy dostępne tylko dla roli "organizator"
 
 //Route::get('/events', 'App\Http\Controllers\EventController@store')->name('events.store');

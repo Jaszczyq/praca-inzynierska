@@ -37,6 +37,11 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      */
 
+    public function search(Request $request) {
+        $query = $request->get('query');
+        $events = Event::where('name', 'like', '%' . $query . '%')->get();
+        return view('search_results', ['events' => $events]);
+    }
     public function store(Request $request)
     {
         $validatedData = $request->validate([
