@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+
+use http\Client\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -15,6 +17,17 @@ class Event extends Model
     protected $attributes = [
         'place' => 'default'
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(EventCategory::class, 'event_event_category', 'event_id', 'category_id');
+    }
+
+    public function create()
+    {
+        $categories = EventCategory::all();
+        return view('events.create', compact('categories'));
+    }
 
     protected $dates = ['date'];
 
@@ -52,6 +65,23 @@ class Event extends Model
         $events = Event::whereDate('date', $selectedDate)->get();
 
         return view('programme.index', compact('selectedDate', 'dates', 'events'));
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'place' => 'required',
+            'category' => 'required', // Upewnij się, że 'category' jest wymagane
+            'date' => 'required',
+            'time' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        // Pozostała logika zapisywania wydarzenia w bazie danych
+
+        return redirect()->route('events.index');
     }
 
 }

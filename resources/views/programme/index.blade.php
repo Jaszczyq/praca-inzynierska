@@ -30,6 +30,27 @@
             <div class="card-body">
                 <input type="text" id="search" placeholder="Wyszukaj">
 
+                <div class="form-group">
+                    <label for="category">Rodzaj wydarzenia:</label>
+                    <select name="category_id" id="category_id" class="form-control">
+                        <option value="">Wybierz kategorię</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+
+                <div class="col-md-8">
+                        <h1>Lista wydarzeń</h1>
+                        <ul>
+                            @foreach($events as $event)
+                                <li>{{ $event->title }} - {{ $event->category->name }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+
                 <ul class="list-group">
                     @forelse ($events as $event)
                         <div class="web-div gray" style="position: relative; overflow: visible;">
@@ -85,7 +106,7 @@
                 </ul>
             </div>
         </div>
-    </div>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function () {

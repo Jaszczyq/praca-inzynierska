@@ -22,6 +22,19 @@
             </div>
 
             <div class="form-group">
+                <label for="category">Rodzaj</label>
+                <select class="form-control" id="category" name="category" required>
+                    @if(isset($categories))
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            </div>
+
+
+
+            <div class="form-group">
                 <label for="date">Data</label>
                 <input type="date" class="form-control" id="date" name="date" required>
             </div>

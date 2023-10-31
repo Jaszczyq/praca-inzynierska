@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -32,9 +33,12 @@ Route::middleware(['can:isOrganizer'])->group(function () {
     Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
 });
 
-Route::get('/event/{id}', 'EventController@details')->name('event.details');
+Route::get('/event/{id}', [EventController::class, 'details'])->name('event.details');
 
-Route::get('/events/search/{name}', 'EventController@search')->name('event.search');
+Route::get('/events/search/{name}', [EventController::class, 'search'])->name('event.search');
+
+Route::resource('eventcategories', EventCategoryController::class);
+
 
 
 

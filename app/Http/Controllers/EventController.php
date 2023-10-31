@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\EventCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -13,25 +14,16 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-        $selectedDate = Carbon::parse($request->input('date', Carbon::now()->toDateString()));
-        $dates = collect();
-        for ($i = 0; $i < 7; $i++) {
-            $dates->push($selectedDate->clone()->addDays($i));
-        }
-
-        $events = Event::whereDate('date', $selectedDate)->get();
-
-        return view('programme.index', compact('selectedDate', 'dates', 'events'));
+        $selectedCategory = $request->input('category');
         $categories = EventCategory::all();
-        $selectedCategory = $request->input('category'); // Pobierz wybraną kategorię z formularza
 
         if ($selectedCategory) {
-            $events = Event::where('event_category_id', $selectedCategory)->get();
+            $events = Event::where('category_id', $selectedCategory)->get();
         } else {
-            $events = Event::all(); // Pobierz wszystkie wydarzenia, jeśli nie wybrano kategorii
+            $events = Event::all();
         }
 
-        return view('programme.index', compact('events', 'categories', 'selectedCategory'));
+        return view('events.index', compact('events', 'categories', 'selectedCategory'));
     }
 
 
@@ -40,18 +32,30 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('events.create');
+        $categories = EventCategory::all();
+        return view('events.create', compact('categories'));
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
 
-    public function search(Request $request) {
-        $query = $request->get('query');
-        $events = Event::where('name', 'like', '%' . $query . '%')->get();
-        return view('search_results', ['events' => $events]);
+    public function search(Request $request, string $id) {
+        $query = $id;
+        if(empty($query)) {
+            $events = Event::all();
+        }
+        else
+            $events = Event::where('title', 'like', '%' . $query . '%')->get();
+        return view('events.search_results', ['events' => $events]);
     }
+
+    /*public function filterCategory(Request $request, string categoryName) {
+        $query = $categoryName;
+
+        return view('events.search_results', ['events' => $events]);
+    }*/
     public function store(Request $request)
     {
         $validatedData = $request->validate([
