@@ -33,6 +33,10 @@ class Event extends Model
         return $value ?: 'default';
     }
 
+    public function category()
+    {
+        return $this->belongsTo(EventCategory::class, 'event_category_id');
+    }
     public function index(Request $request)
     {
         $selectedDate = Carbon::parse($request->query('date'))->startOfDay();

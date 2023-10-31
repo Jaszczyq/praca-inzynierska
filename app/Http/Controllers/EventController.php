@@ -22,6 +22,16 @@ class EventController extends Controller
         $events = Event::whereDate('date', $selectedDate)->get();
 
         return view('programme.index', compact('selectedDate', 'dates', 'events'));
+        $categories = EventCategory::all();
+        $selectedCategory = $request->input('category'); // Pobierz wybraną kategorię z formularza
+
+        if ($selectedCategory) {
+            $events = Event::where('event_category_id', $selectedCategory)->get();
+        } else {
+            $events = Event::all(); // Pobierz wszystkie wydarzenia, jeśli nie wybrano kategorii
+        }
+
+        return view('programme.index', compact('events', 'categories', 'selectedCategory'));
     }
 
 
