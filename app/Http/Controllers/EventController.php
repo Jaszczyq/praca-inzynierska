@@ -18,9 +18,9 @@ class EventController extends Controller
         $categories = EventCategory::all();
 
         if ($selectedCategory) {
-            $events = Event::where('category_id', $selectedCategory)->get();
+            $events = Event::where('category_id', $selectedCategory)->whereDate('date', '>=', Carbon::now())->get();
         } else {
-            $events = Event::all();
+            $events = Event::whereDate('date', '>=', Carbon::now())->get();
         }
 
         return view('events.index', compact('events', 'categories', 'selectedCategory'));
@@ -43,11 +43,14 @@ class EventController extends Controller
 
     public function search(Request $request, string $id) {
         $query = $id;
-        if(empty($query)) {
-            $events = Event::all();
+
+        if($query === '' || $query === 'all') {
+            $events = Event::whereDate('date', '>=', Carbon::now())->get();
         }
-        else
-            $events = Event::where('title', 'like', '%' . $query . '%')->get();
+        else {
+            $events = Event::where('title', 'like', '%' . $query . '%')->whereDate('date', '>=', Carbon::now())->get();
+        }
+
         return view('events.search_results', ['events' => $events]);
     }
 
