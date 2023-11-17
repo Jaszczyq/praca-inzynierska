@@ -27,7 +27,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('events', EventController::class);
+Route::get('/events/my_events', [EventController::class, 'myEvents'])->name('events.my_events');
 
 Route::middleware(['can:isOrganizer'])->group(function () {
     Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
@@ -37,7 +37,15 @@ Route::get('/event/{id}', [EventController::class, 'details'])->name('event.deta
 
 Route::get('/events/search/{name}', [EventController::class, 'search'])->name('event.search');
 
-Route::resource('eventcategories', EventCategoryController::class);
+Route::resource('events', EventController::class);
+
+Route::get('/event/{id}/edit', 'EventsController@edit')->name('event.edit');
+Route::get('/event/{id}/delete', 'EventsController@delete')->name('event.delete');
+// routes/web.php
+
+//Route::resource('eventcategories', EventCategoryController::class);
+//Route::get('eventcategories/filter', EventCategoryController::class, 'filter')->name('eventcategories.filter');
+
 
 
 

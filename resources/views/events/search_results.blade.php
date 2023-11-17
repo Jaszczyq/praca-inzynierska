@@ -75,5 +75,5 @@
     </div>
 
 @empty
-    <p class="text-center">Brak wydarzeń na ten dzień.</p>
+    <p class="text-center">{{ __('events.no_events_search_name') }}</p>
 @endforelse

@@ -1,4 +1,5 @@
-<!doctype html>
+@php use App\Models\Category; @endphp
+    <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -19,16 +20,22 @@
 <body>
 
 
-
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 64C28.7 64 0 92.7 0 128v64c0 8.8 7.4 15.7 15.7 18.6C34.5 217.1 48 235 48 256s-13.5 38.9-32.3 45.4C7.4 304.3 0 311.2 0 320v64c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V320c0-8.8-7.4-15.7-15.7-18.6C541.5 294.9 528 277 528 256s13.5-38.9 32.3-45.4c8.3-2.9 15.7-9.8 15.7-18.6V128c0-35.3-28.7-64-64-64H64zm64 112l0 160c0 8.8 7.2 16 16 16H432c8.8 0 16-7.2 16-16V176c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16zM96 160c0-17.7 14.3-32 32-32H448c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H128c-17.7 0-32-14.3-32-32V160z"/></svg>
-            <a class="navbar-brand self-center text-2xl font-semibold whitespace-nowrap" style="margin-left: 10px;" href="{{ url('/dashboard') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                    d="M64 64C28.7 64 0 92.7 0 128v64c0 8.8 7.4 15.7 15.7 18.6C34.5 217.1 48 235 48 256s-13.5 38.9-32.3 45.4C7.4 304.3 0 311.2 0 320v64c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V320c0-8.8-7.4-15.7-15.7-18.6C541.5 294.9 528 277 528 256s13.5-38.9 32.3-45.4c8.3-2.9 15.7-9.8 15.7-18.6V128c0-35.3-28.7-64-64-64H64zm64 112l0 160c0 8.8 7.2 16 16 16H432c8.8 0 16-7.2 16-16V176c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16zM96 160c0-17.7 14.3-32 32-32H448c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H128c-17.7 0-32-14.3-32-32V160z"/>
+            </svg>
+            <a class="navbar-brand self-center text-2xl font-semibold whitespace-nowrap" style="margin-left: 10px;"
+               href="{{ url('/dashboard') }}">
 
                 {{ config('app.name', 'BiletoRadar') }}
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -36,10 +43,12 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0" href="{{ route('home') }}">Dashboard</a>
+                        <a class="nav-link block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 bg-blue-700 rounded md:bg-transparent md:p-0"
+                           href="{{ route('home') }}">{{ __('dashboard.dashboard') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0" href="{{ route('events.index') }}">Events</a>
+                        <a class="nav-link block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 bg-blue-700 rounded md:bg-transparent md:p-0"
+                           href="{{ route('events.index') }}">{{ __('events.events') }}</a>
                     </li>
                 </ul>
 
@@ -50,27 +59,39 @@
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('auth.login') }}</a>
                             </li>
                         @endif
 
                         @if (Route::has('register'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('auth.register') }}</a>
                             </li>
                         @endif
                     @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" onclick="document.querySelector('.dropdown-menu.dropdown-menu-end').style.display == 'block' ? document.querySelector('.dropdown-menu.dropdown-menu-end').style.display = 'none' : document.querySelector('.dropdown-menu.dropdown-menu-end').style.display = 'block'" class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown"
+                               onclick="document.querySelector('.dropdown-menu.dropdown-menu-end').style.display == 'block' ? document.querySelector('.dropdown-menu.dropdown-menu-end').style.display = 'none' : document.querySelector('.dropdown-menu.dropdown-menu-end').style.display = 'block'"
+                               class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 <span>{{ Auth::user()->name }}</span>
                                 <i class="ml-1 fas fa-caret-down"></i>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                @can('isOrganizer')
+                                    <a class="dropdown-item" href="#"
+                                       onclick="openModal(); document.querySelector('.dropdown-menu.dropdown-menu-end').style.display = 'none'; event.preventDefault()">
+                                        {{ __('events.create') }}
+                                    </a>
+                                @endcan
+                                <a class="dropdown-item" href="{{ route('events.my_events') }}">
+                                    {{ __('events.my_events') }}
+                                </a>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    {{ __('auth.logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -84,12 +105,35 @@
         </div>
     </nav>
 
-    <main class="py-4">
+    <main class="py-4" style="background-image: url('bg.png')">
         @yield('content')
     </main>
 
+    @php
+        $categories = App\Models\EventCategory::all();
+    @endphp
+
+    @component('events.modal_create', ['categories' => $categories])
+    @endcomponent
     <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        var modal = document.getElementById("modal_create");
+
+        function openModal() {
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </div>
 </body>
 </html>

@@ -1,0 +1,51 @@
+<div id="modal_details" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+     aria-modal="true" style="display:none">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg"
+
+         style="border: 1px solid #e2e8f0; border-radius: 5px; margin: 10px 0">
+        <div class="wyd-szukaj-table">
+            <div
+                class="table-row d-flex align-items-start border-2 rounded-lg overflow-hidden w-full text-center line-height-0">
+
+                <div class="row-cell cell-wyd-lista-1 me-3 text-center p-2 my-auto">
+
+                    <div class="text-center p-4 w-36 flex flex-col justify-center h-full">
+                        <div class="no-warp linia-1">
+                            <b id="event_date"></b>
+                        </div>
+                        <div class="no-warp linia-2">
+                            godz. <span id="event_time"></span>
+                        </div>
+                        <div>
+                <span class="no-warp linia-3">
+                  <b id="event_ticket_type"></b>
+                </span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="row-cell cell-wyd-lista-3 me-3 my-auto p-4 text-left relative overflow-hidden table-cell align-middle line-height-normal"
+                    style="width: 30%">
+                    <div class="flex flex-col justify-center h-full">
+                        <div><b id="event_title"></b></div>
+                        <div id="event_categories"></div>
+                    </div>
+                </div>
+                <div
+                    class="row-cell cell-wyd-lista-4 me-3 my-auto p-4 w-56 table-cell align-middle line-height-normal text-center"
+                    style="width: 25%">
+                    <div class="flex flex-col justify-center h-full">
+                        <div><b id="event_city"></b></div>
+                        <div id="event_place"></div>
+                    </div>
+                </div>
+                <div
+                    class="row-cell cell-wyd-lista-5 my-auto p-4 w-30 table-cell align-middle line-height-normal text-center">
+                    <div class="flex flex-col justify-center h-full">
+                        <a href="" class="btn btn-success">{{ __('events.buy') }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
