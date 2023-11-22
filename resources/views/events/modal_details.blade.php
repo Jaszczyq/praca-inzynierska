@@ -6,7 +6,7 @@
             class="inline-block p-5 align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <div class="mb-4">
                 <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                    Szczegóły Wydarzenia
+                    {{__('events.details')}}
                 </h3>
             </div>
             <div class="grid grid-cols-1 gap-4">

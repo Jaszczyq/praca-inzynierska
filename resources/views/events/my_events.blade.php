@@ -3,18 +3,18 @@
 @php
     function translateMonths($dateString) {
         $months = [
-            'January' => 'Styczeń',
-            'February' => 'Luty',
-            'March' => 'Marzec',
-            'April' => 'Kwiecień',
-            'May' => 'Maj',
-            'June' => 'Czerwiec',
-            'July' => 'Lipiec',
-            'August' => 'Sierpień',
-            'September' => 'Wrzesień',
-            'October' => 'Październik',
-            'November' => 'Listopad',
-            'December' => 'Grudzień',
+                    'January' => 'stycznia',
+                     'February' => 'lutego',
+                     'March' => 'marca',
+                     'April' => 'kwietnia',
+                     'May' => 'maja',
+                     'June' => 'czerwca',
+                     'July' => 'lipca',
+                     'August' => 'sierpnia',
+                     'September' => 'września',
+                     'October' => 'października',
+                     'November' => 'listopada',
+                     'December' => 'grudnia',
         ];
 
         return str_replace(
@@ -27,15 +27,16 @@
 
 @section('content')
     <div class="container">
-        <div class="card" style="border: none">
+        <div class="card bg-white" style="border: none">
             <div class="card-body" style="border: 1px solid #e2e8f0; border-radius: 5px">
-                <h1 class="text-2xl font-bold">{{ __('events.my_events') }}</h1>
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <h1 class="text-2xl font-bold">{{ __('events.events') }}</h1>
+                <div class="p-6 space-y-4">
                     <div class="pb-4 bg-white">
                         <label for="table-search" class="sr-only"></label>
                         <div class="relative mt-1">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg
+"
                                      fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                           stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
@@ -47,21 +48,91 @@
                         </div>
                     </div>
 
-                    <div class="form-group flex items-center p-2 rounded">
-                        <select name="category_id" id="category_id" class="form-control w-fit"
-                                onchange="filterEvents(this)">
-                            <option
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                value="">{{ __('events.category') }}
-                            </option>
-                            @foreach($categories as $category)
-                                <option class="w-full ml-2 text-sm font-medium text-gray-900 rounded"
-                                        value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
+                    <div>
+                        <button onclick="toggleCheckboxList()"
+                                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md shadow hover:bg-blue-700 focus:outline-none">{{ __('events.category') }}</button>
+                        <div id="checkboxList" class="hidden mt-2 bg-white border rounded p-2">
+                            <div class="grid grid-cols-2 gap-2">
+                                @foreach($categories as $category)
+                                    <div class="flex items-center ml-2 mb-2">
+                                        <input type="checkbox" id="category_{{ $category->id }}" name="categories[]"
+                                               value="{{ $category->id }}" onchange="filterEvents()">
+                                        <label for="category_{{ $category->id }}"
+                                               class="ml-2 text-sm font-medium text-gray-900">{{ $category->name }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
-
                 </div>
+
+                {{--                <div class="dropdown">--}}
+                {{--                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"--}}
+                {{--                            data-bs-toggle="dropdown" aria-expanded="false">--}}
+                {{--                        Sortuj--}}
+                {{--                    </button>--}}
+                {{--                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">--}}
+                {{--                        <li><a class="dropdown-item" href="#" data-sort="date">Po dacie</a></li>--}}
+                {{--                        <li><a class="dropdown-item" href="#" data-sort="title">Pod nazwą</a></li>--}}
+                {{--                        <li><a class="dropdown-item" href="#" data-sort="city">Po miejscowości</a></li>--}}
+                {{--                    </ul>--}}
+                {{--                    <i class="bi bi-arrow-up" data-order="asc"></i>--}}
+                {{--                    <i class="bi bi-arrow-down" data-order="desc"></i>--}}
+                {{--                </div>--}}
+
+                <script>
+                    var currentSort = 'date';
+                    var currentOrder = 'asc';
+
+                    $('.dropdown-item').click(function (e) {
+                        e.preventDefault();
+                        currentSort = $(this).data('sort');
+                        sort();
+                    });
+
+                    $('.bi-arrow-up, .bi-arrow-down').click(function (e) {
+                        currentOrder = $(this).data('order');
+                        sort();
+                    });
+
+                    function sort() {
+                        var url = '{{ route('events.index') }}' + '?sort=' + currentSort + '&order=' + currentOrder;
+                        window.location.href = url;
+                    }
+
+                    function toggleCheckboxList() {
+                        var checkboxListDiv = document.getElementById('checkboxList');
+                        if (checkboxListDiv.classList.contains('hidden')) {
+                            checkboxListDiv.classList.remove('hidden');
+                        } else {
+                            checkboxListDiv.classList.add('hidden');
+                        }
+                    }
+
+                    function filterEvents() {
+                        // Pobierz wszystkie kategorie
+                        var categories = document.querySelectorAll('input[name="categories[]"]:checked');
+
+                        // Zbierz ID wybranych kategorii
+                        var selectedCategories = Array.from(categories).map(function (category) {
+                            return category.value;
+                        });
+
+                        // Utwórz parametry URL
+                        var params = new URLSearchParams();
+                        for (var i = 0; i < selectedCategories.length; i++) {
+                            params.append('categories[]', selectedCategories[i]);
+                        }
+
+                        // Wyślij żądanie AJAX do serwera
+                        fetch('/events/filter?' + params.toString())
+                            .then(response => response.text())
+                            .then(data => {
+                                // Aktualizuj listę wydarzeń na stronie
+                                document.getElementById('event-list').innerHTML = data;
+                            });
+                    }
+                </script>
 
                 <ul id="event-list" class="list-group" style="border:none">
                     @forelse ($events as $event)
@@ -74,7 +145,7 @@
 
                                         <div class="row-cell cell-wyd-lista-1 me-3 text-center p-2 my-auto">
 
-                                            <div class="text-center p-4 w-36 flex flex-col justify-center h-full">
+                                            <div class="text-center p-4 w-44 flex flex-col justify-center h-full">
                                                 <div class="no-warp linia-1">
                                                     <b>{{ translateMonths($event->date->format('j F Y')) }}</b>
                                                 </div>
@@ -82,9 +153,9 @@
                                                     godz. {{ substr($event->time, 0, strlen($event->time) - 3) }}
                                                 </div>
                                                 <div>
-                <span class="no-warp linia-3">
-                  <b>{{ $event->ticketType }}</b>
-                </span>
+                                                    <span class="no-warp linia-3">
+                                                        <b>{{ $event->ticketType }}</b>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -92,8 +163,13 @@
                                             class="row-cell cell-wyd-lista-2 me-3 align-middle p-0 line-height-0 text-xs my-auto">
                                             <a href="{{ route('event.details', ['id' => $event->id]) }}"
                                                title="{{ $event->title }}">
-                                                <img src="{{ $event->image }}" alt="{{ $event->title }}"
-                                                     class="mx-auto my-auto" width="163px" height="110px"/>
+                                                <div
+                                                    style="width: 163px; height: 110px; overflow: hidden; border-radius: 10px; margin: 10px 0;">
+                                                    <img
+                                                        onclick="openModalDetails({{ $event->id }}); event.preventDefault();"
+                                                        src="{{ $event->image }}" alt="{{ $event->title }}"
+                                                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;"/>
+                                                </div>
                                             </a>
                                         </div>
                                         <div
@@ -101,21 +177,23 @@
                                             style="width: 30%">
                                             <div class="flex flex-col justify-center h-full">
                                                 <div><b>{{ $event->title }}</b></div>
-                                                <div>{{ $event->description }}</div>
+                                                <div>{{ $event->categories->pluck('name')->join(', ') }}</div>
                                             </div>
                                         </div>
                                         <div
                                             class="row-cell cell-wyd-lista-4 me-3 my-auto p-4 w-56 table-cell align-middle line-height-normal text-center"
                                             style="width: 25%">
                                             <div class="flex flex-col justify-center h-full">
-                                                <div><b>{{ $event->place }}</b></div>
+                                                <div><b>{{ $event->city }}</b></div>
+                                                <div>{{ $event->place }}</div>
                                             </div>
                                         </div>
                                         <div
                                             class="row-cell cell-wyd-lista-5 my-auto p-4 w-30 table-cell align-middle line-height-normal text-center">
-                                            <div class="flex flex-col justify-center h-full">
-                                                <a href="{{ route('event.edit', ['id' => $event->id]) }}"
-                                                   class="btn btn-primary">
+                                            <div class="flex flex-row justify-center h-full">
+                                                <a href="#"
+                                                   onclick="openModalEdit({{ $event->id }}); event.preventDefault();"
+                                                   class="bg-white border-white btn btn-primary edit-button mr-4">
                                                     <svg xmlns="http://www.w3.org/2000/svg" height="1em"
                                                          viewBox="0 0 512 512">
                                                         <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
@@ -123,8 +201,9 @@
                                                             d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/>
                                                     </svg>
                                                 </a>
-                                                <a href="{{ route('event.delete', ['id' => $event->id]) }}"
-                                                   class="btn btn-danger">
+                                                <a href="#"
+                                                   onclick="openModalDelete({{ $event->id }}); event.preventDefault();"
+                                                   class="btn border-white bg-white btn-danger">
                                                     <svg xmlns="http://www.w3.org/2000/svg" height="1em"
                                                          viewBox="0 0 448 512">
                                                         <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
@@ -146,6 +225,20 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+            // Zakładamy, że masz przycisk edycji dla każdego wydarzenia z atrybutem data-id ustawionym na id wydarzenia
+            $('.edit-button').on('click', function () {
+                var eventId = $(this).data('id');
+                $.ajax({
+                    url: '/events/' + eventId + '/edit', // Zaktualizuj tę ścieżkę do ścieżki edycji w twoim API
+                    method: 'GET',
+                    success: function (data) {
+                        // Zakładamy, że twoje API zwraca formularz HTML z wypełnionymi danymi wydarzenia
+                        $('#modal_edit .modal-content').html(data);
+                        $('#modal_edit').show();
+                    }
+                });
+            });
+
             $(document).ready(function () {
                 let timeout;
 
@@ -171,28 +264,143 @@
                         }, 300);
                     });
                 });
-
-                // function filterEvents(selectElement) {
-                //     const categoryId = selectElement.value;
-                //
-                //     if (categoryId) {
-                //         // Wywołaj żądanie AJAX do kontrolera EventController w akcji filter, przekazując categoryId.
-                //         $.ajax({
-                //             url: '/events/filter', // Zastąp ścieżką do odpowiedniego endpointa kontrolera.
-                //             type: 'GET',
-                //             data: {categoryId: categoryId},
-                //             success: function (response) {
-                //                 // Tutaj zaktualizuj listę wydarzeń na stronie na podstawie odpowiedzi z kontrolera.
-                //             },
-                //             error: function (error) {
-                //                 // Obsłuż ewentualny błąd związany z żądaniem AJAX.
-                //             }
-                //         });
-                //     }
-                //
-                //
-                // }
             });
+        </script>
+        @component('events.modal_edit', ['categories' => $categories])
+        @endcomponent
+        <script>
+            var modalEdit = document.getElementById("modal_edit");
+
+            var edit_url = "{{ route('event.update', ':id') }}";
+
+            document.getElementById("eventEditForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+                var url = edit_url.replace(':id', document.getElementById("id_event").value);
+
+                fetch(url, {
+                    method: 'POST',
+                    body: new FormData(this)
+                }).then(function (response) {
+                    closeModalEdit();
+                    location.reload();
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            });
+
+            function openModalEdit(id) {
+                modalEdit.style.display = "block";
+
+                fetch('/events/' + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("id_event").value = data.id;
+                        document.getElementById("titleEdit").value = data.title;
+                        document.getElementById("descriptionEdit").value = data.description;
+                        document.getElementById("cityEdit").value = data.city;
+                        document.getElementById("placeEdit").value = data.place;
+                        var selectElement = document.getElementById("categoryEdit");
+                        selectElement.value = data.category_id;
+                        document.getElementById("dateEdit").value = data.date.split('T')[0];
+                        document.getElementById("timeEdit").value = data.time;
+                    });
+            }
+
+            function closeModalEdit() {
+                modalEdit.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modalEdit) {
+                    modalEdit.style.display = "none";
+                }
+            }
+        </script>
+
+        @component('events.modal_delete')
+        @endcomponent
+        <script>
+            var modalDelete = document.getElementById("modal_delete");
+
+            var delete_url = "{{ route('event.delete', ':id') }}";
+
+            function openModalDelete(id) {
+                modalDelete.style.display = "block";
+
+                fetch('/events/' + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("id_event_delete").value = data.id;
+                        document.getElementById("eventNameDelete").innerText = data.title;
+                        document.getElementById("event_title_delete").innerText = data.title;
+                    });
+            }
+
+            function closeModalDelete() {
+                modalDelete.style.display = "none";
+            }
+
+            document.getElementById("eventDeleteForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+                var url = delete_url.replace(':id', document.getElementById("id_event_delete").value);
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: new URLSearchParams({
+                        '_method': 'DELETE'
+                    })
+                }).then(function (response) {
+                    console.log(response);
+                    closeModalDelete();
+                    location.reload();
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            });
+
+            window.onclick = function (event) {
+                if (event.target == modalDelete) {
+                    modalDelete.style.display = "none";
+                }
+            }
+        </script>
+
+        @component('events.modal_details', ['categories' => $categories])
+        @endcomponent
+        <script>
+            var modalDetails = document.getElementById("modal_details");
+
+            const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+
+            function openModalDetails(id) {
+                modalDetails.style.display = "block";
+
+                fetch('/events/' + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("event_title").textContent = data.title;
+                        document.getElementById("event_description").textContent = data.description;
+                        document.getElementById("event_city").textContent = data.city;
+                        document.getElementById("event_place").textContent = data.place;
+                        document.getElementById("event_date").textContent = new Date(data.date).toLocaleDateString('pl-PL', options);
+                        document.getElementById("event_time").textContent = data.time;
+                        document.getElementById("event_categories").textContent = data.category;
+                    });
+            }
+
+            function closeModalDetails() {
+                modalDetails.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modalDetails) {
+                    modalDetails.style.display = "none";
+                }
+            }
         </script>
 
         <script src="node_modules/flowbite/dist/flowbite.min.js"></script>

@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -37,21 +36,13 @@ Route::get('/event/{id}', [EventController::class, 'details'])->name('event.deta
 
 Route::get('/events/search/{name}', [EventController::class, 'search'])->name('event.search');
 
+Route::get('/events/filter', [EventController::class, 'filter'])->name('events.filter');
+
+// Route::get('events.index', [EventController::class, 'index']);
+
 Route::resource('events', EventController::class);
 
-Route::get('/event/{id}/edit', 'EventsController@edit')->name('event.edit');
-Route::get('/event/{id}/delete', 'EventsController@delete')->name('event.delete');
-// routes/web.php
-
-//Route::resource('eventcategories', EventCategoryController::class);
-//Route::get('eventcategories/filter', EventCategoryController::class, 'filter')->name('eventcategories.filter');
-
-
-
-
-
-    // Trasy dostępne tylko dla roli "organizator"
-
-//Route::get('/events', 'App\Http\Controllers\EventController@store')->name('events.store');
-
+Route::get('/event/{id}/edit', [EventController::class, 'edit'])->name('event.edit');
+Route::delete('/event/{id}/delete', [EventController::class, 'delete'])->name('event.delete');
+Route::post('/event/{id}/update', [EventController::class, 'update'])->name('event.update');
 

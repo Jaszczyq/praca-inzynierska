@@ -22,5 +22,10 @@ return [
     'image' => 'Zdjęcie',
     'add' => 'Dodaj wydarzenie',
     'close' => 'Zamknij',
+    'update' => 'Aktualizuj',
+
+    'confirm_delete' => 'Czy na pewno chcesz usunąć wydarzenie',
+    'confirm' => 'Tak',
+    'cancel' => 'Nie',
 
 ];

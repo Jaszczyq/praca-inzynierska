@@ -84,10 +84,10 @@
                                        onclick="openModal(); document.querySelector('.dropdown-menu.dropdown-menu-end').style.display = 'none'; event.preventDefault()">
                                         {{ __('events.create') }}
                                     </a>
-                                @endcan
                                 <a class="dropdown-item" href="{{ route('events.my_events') }}">
                                     {{ __('events.my_events') }}
                                 </a>
+                                @endcan
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
