@@ -1,0 +1,12 @@
+.seat {
+    border: none;
+    background: none;
+}
+
+.seat svg {
+    fill: green;
+}
+
+.seat.disabled svg {
+    fill: gray;
+}

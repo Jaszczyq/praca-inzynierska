@@ -46,3 +46,6 @@ Route::get('/event/{id}/edit', [EventController::class, 'edit'])->name('event.ed
 Route::delete('/event/{id}/delete', [EventController::class, 'delete'])->name('event.delete');
 Route::post('/event/{id}/update', [EventController::class, 'update'])->name('event.update');
 
+Route::get('/seats', function () {
+    return view('booking.seats');
+})->name('seats');

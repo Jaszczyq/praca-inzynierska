@@ -16,6 +16,8 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 
@@ -105,7 +107,7 @@
         </div>
     </nav>
 
-    <main class="py-4" style="background-image: url('bg.png')">
+    <main class="py-4">
         @yield('content')
     </main>
 
@@ -115,8 +117,6 @@
 
     @component('events.modal_create', ['categories' => $categories])
     @endcomponent
-    <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         var modal = document.getElementById("modal_create");
 

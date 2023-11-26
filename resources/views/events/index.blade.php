@@ -187,7 +187,7 @@
                                     <div
                                         class="row-cell cell-wyd-lista-5 my-auto p-4 w-44 table-cell align-middle line-height-normal text-center">
                                         <div class="flex flex-col justify-center h-full">
-                                            <a href="" class="btn btn-success">{{ __('events.buy') }}</a>
+                                            <a href="{{ route('seats') }}" class="btn btn-success">{{ __('events.buy') }}</a>
                                         </div>
                                     </div>
                                 </div>
