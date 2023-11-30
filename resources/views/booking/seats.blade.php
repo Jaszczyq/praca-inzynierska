@@ -29,25 +29,6 @@
     $left_side = 5;
     $right_side = 5;
 
-    /*
-     * <div class="row">
-        <button class="seat disabled">
-            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z"/></svg>
-        </button>
-        <!-- ... -->
-    </div>
-    <div class="row">
-        <button class="seat disabled">
-            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z"/></svg>
-        </button>
-        <!-- ... -->
-    </div>
-    <!-- ... -->
-
-    <button class="seat" id="seat_{{ $row }}_{{ $column }}">
-                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z"/></svg>
-            </button>
-     */
 @endphp
 
 @section('content')
@@ -107,50 +88,104 @@
         }
     </style>
     <link rel="stylesheet" type="text/css" href="resources/css/seats.css">
-    @for($row = 1; $row <= $rows; $row++)
-        <div class="row">
-        @for($column = $columns; $column > 0; $column--)
-            @if($column == $left_side)
-                <button class="seat available" id="seat_{{ $row }}_{{ $column }}" style="margin-right: 20px;">
-            @elseif($column == $columns - $right_side + 1)
-                <button class="seat available" id="seat_{{ $row }}_{{ $column }}" style="margin-left: 20px;">
-            @else
-                <button class="seat available" id="seat_{{ $row }}_{{ $column }}">
-            @endif
-                <div class="seat_container">
-                    <span id="seat_nr_{{ $row }}_{{ $column }}" style="display: none; color: white !important;">{{$column}}</span>
-                    <img src="{{url('/images/events/couch-solid.png')}}" alt="Seat">
-                </div>
-            </button>
-        @endfor
-    @endfor
+    <div class="container">
+        <div class="card bg-white" style="border: none;">
+            <div class="card-body" style="border: 1px solid #e2e8f0; border-radius: 5px">
+                <h2 id="eventTitle"></h2>
+                <p id="eventDateTime"></p>
+                <p id="eventLocation"></p>
+                @for($row = 1; $row <= $rows; $row++)
+                    <div class="row">
+                        @for($column = $columns; $column > 0; $column--)
+                            @if($column == $left_side)
+                                <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
+                                        style="margin-right: 20px;">
+                                    @elseif($column == $columns - $right_side + 1)
+                                        <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
+                                                style="margin-left: 20px;">
+                                            @else
+                                                <button class="seat available" id="seat_{{ $row }}_{{ $column }}">
+                                                    @endif
+                                                    <div class="seat_container">
+                                                    <span id="seat_nr_{{ $row }}_{{ $column }}"
+                                                          style="display: none; color: white !important;">{{$column}}</span>
+                                                        <img src="{{url('/images/events/couch-solid.png')}}" alt="Seat">
+                                                    </div>
+                                                </button>
+                                @endfor
+                                @endfor
+                    </div>
+            </div>
+            <div class="mt-4">
+                <button class="btn btn-primary" id="reserve-btn" disabled>Rezerwuj</button>
+                <button class="btn btn-success" id="buy-btn" disabled>Kup bulet</button>
+            </div>
+        </div>
 
-    <script>
-        document.querySelectorAll('.seat').forEach(seat => {
-            seat.addEventListener('click', (e) => {
-                var target = e.target;
-                var clickedButton;
-                if (target.tagName === 'BUTTON') {
-                    clickedButton = target;
+        <script>
+            function isAnySeatSelected() {
+                return document.querySelectorAll('.seat.selected').length > 0;
+            }
+
+            function switchButtons() {
+                if (isAnySeatSelected()) {
+                    console.log('Any seat selected');
+                    document.getElementById('reserve-btn').disabled = false;
+                    document.getElementById('buy-btn').disabled = false;
                 }
                 else {
-                    clickedButton = target.closest('button');
+                    document.getElementById('reserve-btn').disabled = true;
+                    document.getElementById('buy-btn').disabled = true;
                 }
-                if (!clickedButton.classList.contains('disabled')) {
-                    if(clickedButton.classList.contains('selected')) {
-                        clickedButton.classList.remove('selected');
-                        clickedButton.querySelector('span').style.display = 'none';
-                    }
-                    else {
-                        clickedButton.classList.add('selected');
-                        clickedButton.querySelector('span').style.display = 'inline';
-                    }
-                }
-            });
-        });
-    </script>
+            }
 
-    <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+            document.querySelectorAll('.seat').forEach(seat => {
+                seat.addEventListener('click', (e) => {
+                    var target = e.target;
+                    var clickedButton;
+                    if (target.tagName === 'BUTTON') {
+                        clickedButton = target;
+                    } else {
+                        clickedButton = target.closest('button');
+                    }
+                    if (!clickedButton.classList.contains('disabled')) {
+                        if (clickedButton.classList.contains('selected')) {
+                            clickedButton.classList.remove('selected');
+                            clickedButton.querySelector('span').style.display = 'none';
+                        } else {
+                            clickedButton.classList.add('selected');
+                            clickedButton.querySelector('span').style.display = 'inline';
+                        }
+                    }
+                    switchButtons();
+                });
+            });
+
+            function getSeatsAsString() {
+                var seats = '';
+                document.querySelectorAll('.seat.selected').forEach(seat => {
+                    seats += seat.id.replace('seat_', '') + ',';
+                });
+                seats = seats.slice(0, -1);
+                return seats;
+            }
+
+            document.getElementById("buy-btn").addEventListener("click", function() {
+                window.location.href = "/purchase-summary/{{$event->id}}/"+getSeatsAsString();
+            });
+
+            document.getElementById("reserve-btn-btn").addEventListener("click", function() {
+                window.location.href = "/reservation-summary/{{$event->id}}/"+getSeatsAsString();
+            });
+
+            document.getElementById('eventTitle').innerText = event.title;
+            document.getElementById('eventDateTime').innerText = event.date + ' at ' + event.time;
+            document.getElementById('eventLocation').innerText = event.city + ', ' + event.place;
+
+            // code to display the modal
+        </script>
+
+        <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
 
 @endsection

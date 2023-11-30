@@ -107,7 +107,7 @@
         </div>
     </nav>
 
-    <main class="py-4">
+    <main class="py-4" style="background-color: #F0F0F0; ">
         @yield('content')
     </main>
 

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PurchaseController;
+use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +48,11 @@ Route::get('/event/{id}/edit', [EventController::class, 'edit'])->name('event.ed
 Route::delete('/event/{id}/delete', [EventController::class, 'delete'])->name('event.delete');
 Route::post('/event/{id}/update', [EventController::class, 'update'])->name('event.update');
 
-Route::get('/seats', function () {
-    return view('booking.seats');
+Route::get('/seats/{id}', function ($id) {
+    $event = Event::find($id);
+    return view('booking.seats' , ['event' => $event]);
 })->name('seats');
+
+Route::get('/purchase-summary/{event_id}/{seats}', [PurchaseController::class, 'showSummary']);
+Route::get('/reservation-summary/{event_id}/{seats}', [ReservationController::class, 'showSummary']);
+

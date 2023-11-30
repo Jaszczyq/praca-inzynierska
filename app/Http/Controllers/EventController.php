@@ -95,6 +95,10 @@ class EventController extends Controller
 
         $event->categories()->attach($validatedData['category']);
 
+        foreach ($request->input('ticket_types') as $ticketTypeData) {
+            $event->ticketTypes()->attach($ticketTypeData['id'], ['price' => $ticketTypeData['price']]);
+        }
+
         return redirect()->route('events.index');
     }
 

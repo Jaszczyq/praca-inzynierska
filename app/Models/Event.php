@@ -31,6 +31,15 @@ class Event extends Model
 
     protected $dates = ['date'];
 
+    public function ticketTypes()
+    {
+        // Zwraca relację many-to-many z modelu TicketType
+        // za pomocą tabeli łączącej 'event_ticket_type'
+        // Zakładamy, że kolumny w tej tabeli to 'event_id' i 'ticket_type_id'
+        return $this->belongsToMany(TicketType::class, 'event_ticket_types', 'event_id', 'ticket_type_id')
+            ->withPivot('price');
+    }
+
     public function getDateAttribute($value)
     {
         return Carbon::parse($value);

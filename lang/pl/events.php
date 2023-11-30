@@ -23,6 +23,7 @@ return [
     'add' => 'Dodaj wydarzenie',
     'close' => 'Zamknij',
     'update' => 'Aktualizuj',
+    'no_events' => 'Brak wydarzeń',
 
     'confirm_delete' => 'Czy na pewno chcesz usunąć wydarzenie',
     'confirm' => 'Tak',
