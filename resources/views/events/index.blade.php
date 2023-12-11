@@ -25,18 +25,66 @@
     }
 @endphp
 
+<style>
+    .button-87 {
+        margin: 10px;
+        padding: 15px 30px;
+        text-align: center;
+        text-transform: uppercase;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        border-radius: 10px;
+        display: block;
+        border: 0px;
+        font-weight: 700;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+    .button-87:hover {
+        background-position: right center;
+        /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .button-87:active {
+        transform: scale(0.95);
+    }
+
+    #event-list > div:hover {
+        transition: all .3s ease-in-out;
+        box-shadow: 0 10px 20px silver;
+    }
+
+    #sort > option, #order > option {
+        font-family: "Source Sans Pro", sans-serif;
+        font-size: 13px;
+    }
+</style>
 @section('content')
     <div class="container">
         <div class="card bg-white" style="border: none">
             <div class="card-body" style="border: 1px solid #e2e8f0; border-radius: 5px">
-                <h1 class="text-2xl font-bold">{{ __('events.events') }}</h1>
+                <h1 class="text-2xl font-bold text-center">{{ __('events.events') }}</h1>
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    @can('isOrganizer')
+                        <button class="bg-blue-600 button-87"
+                                onclick="openModal(); document.querySelector('.dropdown-menu.dropdown-menu-end').style.display = 'none'; event.preventDefault();">
+                            {{ __('events.create') }}
+                        </button>
+                    @endcan
+                </div>
+
                 <div class="p-6 space-y-4">
                     <div class="pb-4 bg-white">
                         <label for="table-search" class="sr-only"></label>
                         <div class="relative mt-1">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg
-"
+                                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                      fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                           stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
@@ -66,40 +114,19 @@
                     </div>
                 </div>
 
-{{--                <div class="dropdown">--}}
-{{--                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"--}}
-{{--                            data-bs-toggle="dropdown" aria-expanded="false">--}}
-{{--                        Sortuj--}}
-{{--                    </button>--}}
-{{--                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">--}}
-{{--                        <li><a class="dropdown-item" href="#" data-sort="date">Po dacie</a></li>--}}
-{{--                        <li><a class="dropdown-item" href="#" data-sort="title">Pod nazwą</a></li>--}}
-{{--                        <li><a class="dropdown-item" href="#" data-sort="city">Po miejscowości</a></li>--}}
-{{--                    </ul>--}}
-{{--                    <i class="bi bi-arrow-up" data-order="asc"></i>--}}
-{{--                    <i class="bi bi-arrow-down" data-order="desc"></i>--}}
-{{--                </div>--}}
+                <div class="flex justify-start items-center w-full">
+                    <select name="sort" id="sort" class="min-w-[140px] mr-1 rounded-md bg-white border border-gray-300" onchange="sort()">
+                        <option value="date" selected="">Sortuj: po dacie</option>
+                        <option value="title">Sortuj: po tytule</option>
+                        <option value="city">Sortuj: po miejscowości</option>
+                    </select>
+                    <select name="order" id="order" class="w-[115px] ml-1 rounded-md bg-white border border-gray-300" onchange="sort()">
+                        <option value="asc" selected="">↑ &nbsp; rosnąco</option>
+                        <option value="desc">↓ &nbsp; malejąco</option>
+                    </select>
+                </div>
 
                 <script>
-                    var currentSort = 'date';
-                    var currentOrder = 'asc';
-
-                    $('.dropdown-item').click(function(e) {
-                        e.preventDefault();
-                        currentSort = $(this).data('sort');
-                        sort();
-                    });
-
-                    $('.bi-arrow-up, .bi-arrow-down').click(function(e) {
-                        currentOrder = $(this).data('order');
-                        sort();
-                    });
-
-                    function sort() {
-                        var url = '{{ route('events.index') }}' + '?sort=' + currentSort + '&order=' + currentOrder;
-                        window.location.href = url;
-                    }
-
                     function toggleCheckboxList() {
                         var checkboxListDiv = document.getElementById('checkboxList');
                         if (checkboxListDiv.classList.contains('hidden')) {
@@ -132,15 +159,24 @@
                                 document.getElementById('event-list').innerHTML = data;
                             });
                     }
+
+                    function sort() {
+                        console.log("Change event triggered");
+                        fetch('/events/sort/' + $('#sort').val() + '/' + $('#order').val())
+                            .then(response => response.text())
+                            .then(data => {
+                                document.getElementById('event-list').innerHTML = data;
+                            });
+                    }
                 </script>
 
                 <ul id="event-list" class="list-group" style="border:none">
                     @forelse ($events as $event)
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg"
-                             style="border: 1px solid #e2e8f0; border-radius: 5px; margin: 10px 0">
+                             style="border-radius: 5px; margin: 10px 0">
                             <div class="wyd-szukaj-table">
                                 <div
-                                    class="table-row d-flex align-items-start border-2 rounded-lg overflow-hidden w-full text-center line-height-0">
+                                    class="table-row d-flex align-items-start rounded-lg overflow-hidden w-full text-center line-height-0">
 
                                     <div class="row-cell cell-wyd-lista-1 me-3 text-center p-2 my-auto">
 
@@ -152,19 +188,22 @@
                                                 godz. {{ substr($event->time, 0, strlen($event->time) - 3) }}
                                             </div>
                                             <div>
-        <span class="no-warp linia-3">
-            <b>{{ $event->ticketType }}</b>
-        </span>
+                                            <span class="no-warp linia-3">
+                                                <b>{{ $event->ticketType }}</b>
+                                            </span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row-cell cell-wyd-lista-2 me-3 align-middle p-0 line-height-0 text-xs my-auto">
+                                    <div
+                                        class="row-cell cell-wyd-lista-2 me-3 align-middle p-0 line-height-0 text-xs my-auto">
                                         <a href="{{ route('event.details', ['id' => $event->id]) }}"
                                            title="{{ $event->title }}">
-                                            <div style="width: 163px; height: 110px; overflow: hidden; border-radius: 10px; margin: 10px 0;">
-                                                <img onclick="openModalDetails({{ $event->id }}); event.preventDefault();"
-                                                     src="{{ $event->image }}" alt="{{ $event->title }}"
-                                                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;"/>
+                                            <div
+                                                style="width: 163px; height: 110px; overflow: hidden; border-radius: 10px; margin: 10px 0;">
+                                                <img
+                                                    onclick="openModalDetails({{ $event->id }}); event.preventDefault();"
+                                                    src="{{ $event->image }}" alt="{{ $event->title }}"
+                                                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;"/>
                                             </div>
                                         </a>
                                     </div>
@@ -187,7 +226,8 @@
                                     <div
                                         class="row-cell cell-wyd-lista-5 my-auto p-4 w-44 table-cell align-middle line-height-normal text-center">
                                         <div class="flex flex-col justify-center h-full">
-                                            <a href="{{ route('seats', ['id' => $event->id]) }}" class="btn btn-success">{{ __('events.buy') }}</a>
+                                            <a href="{{ route('seats', ['id' => $event->id]) }}"
+                                               class="btn btn-success">{{ __('events.buy') }}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -261,6 +301,26 @@
             window.onclick = function (event) {
                 if (event.target == modalDetails) {
                     modalDetails.style.display = "none";
+                }
+            }
+        </script>
+
+        @component('events.modal_create', ['categories' => $categories])
+        @endcomponent
+        <script>
+            var modal = document.getElementById("modal_create");
+
+            function openModal() {
+                modal.style.display = "block";
+            }
+
+            function closeModal() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
                 }
             }
         </script>

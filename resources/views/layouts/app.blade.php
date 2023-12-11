@@ -7,7 +7,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <link href='https://fonts.googleapis.com/css?family=Source Sans Pro' rel='stylesheet'>
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -19,11 +19,11 @@
     <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body style="font-family: 'Source Sans Pro';">
 
 
 <div id="app">
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" style="--bs-gradient: linear-gradient(180deg,rgba(255,255,255,0.15),rgba(255,255,255,0));">
         <div class="container">
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
                 <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
@@ -31,7 +31,7 @@
                     d="M64 64C28.7 64 0 92.7 0 128v64c0 8.8 7.4 15.7 15.7 18.6C34.5 217.1 48 235 48 256s-13.5 38.9-32.3 45.4C7.4 304.3 0 311.2 0 320v64c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V320c0-8.8-7.4-15.7-15.7-18.6C541.5 294.9 528 277 528 256s13.5-38.9 32.3-45.4c8.3-2.9 15.7-9.8 15.7-18.6V128c0-35.3-28.7-64-64-64H64zm64 112l0 160c0 8.8 7.2 16 16 16H432c8.8 0 16-7.2 16-16V176c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16zM96 160c0-17.7 14.3-32 32-32H448c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H128c-17.7 0-32-14.3-32-32V160z"/>
             </svg>
             <a class="navbar-brand self-center text-2xl font-semibold whitespace-nowrap" style="margin-left: 10px;"
-               href="{{ url('/dashboard') }}">
+               href="{{ route('home') }}">
 
                 {{ config('app.name', 'BiletoRadar') }}
             </a>
@@ -44,10 +44,6 @@
             <div class="navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 bg-blue-700 rounded md:bg-transparent md:p-0"
-                           href="{{ route('home') }}">{{ __('dashboard.dashboard') }}</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 bg-blue-700 rounded md:bg-transparent md:p-0"
                            href="{{ route('events.index') }}">{{ __('events.events') }}</a>
@@ -82,10 +78,6 @@
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 @can('isOrganizer')
-                                    <a class="dropdown-item" href="#"
-                                       onclick="openModal(); document.querySelector('.dropdown-menu.dropdown-menu-end').style.display = 'none'; event.preventDefault()">
-                                        {{ __('events.create') }}
-                                    </a>
                                 <a class="dropdown-item" href="{{ route('events.my_events') }}">
                                     {{ __('events.my_events') }}
                                 </a>
@@ -107,7 +99,7 @@
         </div>
     </nav>
 
-    <main class="py-4" style="background-color: #F0F0F0; ">
+    <main class="py-4" style="background-color: #F0F0F0; min-height: 100vh;">
         @yield('content')
     </main>
 
@@ -115,25 +107,7 @@
         $categories = App\Models\EventCategory::all();
     @endphp
 
-    @component('events.modal_create', ['categories' => $categories])
-    @endcomponent
-    <script>
-        var modal = document.getElementById("modal_create");
 
-        function openModal() {
-            modal.style.display = "block";
-        }
-
-        function closeModal() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
 </div>
 </body>
 </html>
