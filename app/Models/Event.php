@@ -12,7 +12,7 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'date', 'time', 'image'];
+    protected $fillable = ['title', 'description', 'date', 'time', 'image, added_by'];
 
     protected $attributes = [
         'place' => 'default'

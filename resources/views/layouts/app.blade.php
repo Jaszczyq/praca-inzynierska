@@ -45,7 +45,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 bg-blue-700 rounded md:bg-transparent md:p-0"
+                        <a class="nav-link block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 {{ request()->routeIs('events.index') ? 'underline text-blue-700' : '' }} rounded md:p-0"
                            href="{{ route('events.index') }}">{{ __('events.events') }}</a>
                     </li>
                 </ul>

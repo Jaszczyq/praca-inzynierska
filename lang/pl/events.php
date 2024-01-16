@@ -16,7 +16,8 @@ return [
     'place' => 'Miejsce',
     'description' => 'Opis',
     'title' => 'Tytuł',
-    'search' => 'Szukaj wydarzenia',
+    'search_title' => 'Szukaj po tytule',
+    'search_city' => 'Szukaj po miejscowości',
     'buy' => 'Kup bilet',
     'category' => 'Rodzaj wydarzenia',
     'image' => 'Zdjęcie',
@@ -28,5 +29,11 @@ return [
     'confirm_delete' => 'Czy na pewno chcesz usunąć wydarzenie',
     'confirm' => 'Tak',
     'cancel' => 'Nie',
+
+    'sort_date' => 'Sortuj po dacie',
+    'sort_title' => 'Sortuj po tytule',
+    'sort_city' => 'Sortuj po miejsowości',
+    'sort_up' => 'rosnąco',
+    'sort_down' => 'malejąco',
 
 ];

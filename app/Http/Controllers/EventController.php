@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventCategory;
+use App\Models\Hall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class EventController extends Controller
 {
@@ -46,15 +48,13 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      */
 
-    public function search(Request $request, string $id)
+    public function search(Request $request)
     {
-        $query = $id;
 
-        if ($query === '' || $query === 'all') {
-            $events = Event::whereDate('date', '>=', Carbon::now())->get();
-        } else {
-            $events = Event::where('title', 'like', '%' . $query . '%')->whereDate('date', '>=', Carbon::now())->get();
-        }
+        $title = $request->query('title');
+        $city = $request->query('city');
+
+        $events = Event::where('title', 'like', '%' . $title . '%')->where('city', 'like', '%' . $city . '%')->whereDate('date', '>=', Carbon::now())->get();
 
         return view('events.search_results', ['events' => $events]);
     }
@@ -66,11 +66,6 @@ class EventController extends Controller
         return view('events.search_results', ['events' => $events]);
     }
 
-    /*public function filterCategory(Request $request, string categoryName) {
-        $query = $categoryName;
-
-        return view('events.search_results', ['events' => $events]);
-    }*/
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -97,6 +92,7 @@ class EventController extends Controller
         $event->image = asset('storage/' . $imagePath);
         $event->city = $validatedData['city'];
         $event->category_id = $validatedData['category'];
+        $event->added_by = Auth::user()->id;
 
         $event->save();
 
@@ -155,12 +151,15 @@ class EventController extends Controller
     {
         $event = Event::find($id);
 
-        if($event) {
-            $event->delete();
-            return response()->json(['success' => 'Wydarzenie zostało usunięte'], 200);
+
+        if(!$event) {
+            return response()->json(['error' => 'Nie znaleziono wydarzenia'], 404);
         }
 
-        return response()->json(['error' => 'Nie znaleziono wydarzenia'], 404);
+        dd($event);
+
+        $event->delete();
+        return response()->json(['success' => 'Wydarzenie zostało usunięte'], 200);
     }
 
     public function filter(Request $request) {
@@ -181,13 +180,29 @@ class EventController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $event = Event::find($id); // Znajdź wydarzenie po ID
+        $event = Event::find($id);
         if (!$event) {
             return redirect()->back()->with('error', 'Event not found');
         }
 
-        $data = $request->all(); // Pobierz wszystkie dane z formularza
-        $event->update($data); // Aktualizuj wydarzenie
+        $data = $request->all();
+        //dd($data);
+        //$result = $event->update($data);
+
+        $event->title = $data['title'];
+        $event->description = $data['description'];
+        $event->city = $data['city'];
+        $event->place = $data['place'];
+        $event->date = $data['date'];
+        $event->time = $data['time'];
+
+        if(isset($data['image'])) {
+            $imagePath = $request->file('image')->store('public/images');
+            $imagePath = str_replace('public/', '', $imagePath); // usuwamy public z ścieżki, aby była ona dostępna publicznie
+            $event->image = asset('storage/' . $imagePath);
+        }
+
+        $event->save();
 
         return redirect()->route('events.index')->with('success', 'Event updated successfully');
     }

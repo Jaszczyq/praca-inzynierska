@@ -28,4 +28,9 @@ class PaymentController extends Controller
 
         return view('booking.payment', ['event' => $event]);
     }
+
+    public function confirmPayment(Request $request)
+    {
+        $paymentMethod = $request->get('payment_method');
+    }
 }
