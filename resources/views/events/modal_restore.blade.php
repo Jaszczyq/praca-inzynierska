@@ -1,4 +1,4 @@
-<div id="modal_edit" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+<div id="modal_restore" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
      aria-modal="true" style="display:none">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 opacity-75"></div>
@@ -8,7 +8,7 @@
                 @csrf
                 <div class="mb-4">
                     <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                    {{ __('events.edit') }}
+                    {{ __('events.restore') }}
                 </div>
                 <input type="hidden" name="id_event" id="id_event" value="">
                 <div class="grid grid-cols-1 gap-4">
@@ -75,14 +75,15 @@
                     </div>
                 </div>
                 <div class="mt-5 sm:mt-6 flex justify-center space-x-4">
-                    <button type="button" onclick="closeModalEdit()"
+                    <button type="button" onclick="closeModalRestore()"
                             class="inline-flex justify-center px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                         {{ __('events.close') }}
                     </button>
                     <button type="submit"
                             class="inline-flex justify-center px-4 py-2 text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-700 transition duration-150 ease-in-out">
-                        {{ __('events.update') }}
+                        {{ __('events.event_restore') }}
                     </button>
+
                 </div>
             </form>
         </div>

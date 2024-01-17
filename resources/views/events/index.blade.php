@@ -198,7 +198,7 @@
                                                 <b>{{ translateMonths($event->date->format('j F Y')) }}</b>
                                             </div>
                                             <div class="no-warp linia-2">
-                                                godz. {{ substr($event->time, 0, strlen($event->time) - 3) }}
+                                                {{ __('events.hour') }} {{ substr($event->time, 0, strlen($event->time) - 3) }}
                                             </div>
                                             <div>
                                             <span class="no-warp linia-3">

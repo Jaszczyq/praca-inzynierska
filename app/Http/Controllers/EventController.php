@@ -246,22 +246,29 @@ class EventController extends Controller
         return redirect()->route('events.index');
     }
 
+
     public function myEvents(Request $request)
     {
         $selectedCategory = $request->input('category');
         $categories = EventCategory::all();
+        $userId = Auth::user()->id;
 
         try {
+            $currentEventsQuery = Event::where('added_by', $userId)->whereDate('date', '>=', Carbon::now());
+            $archivedEventsQuery = Event::where('added_by', $userId)->whereDate('date', '<', Carbon::now());
+
             if ($selectedCategory) {
-                $events = Event::where('category_id', $selectedCategory)->whereDate('date', '>=', Carbon::now())->get()->where('added_by', Auth::user()->id)->get();
-            } else {
-                $events = Event::whereDate('date', '>=', Carbon::now())->where('added_by', Auth::user()->id)->get();
+                $currentEventsQuery = $currentEventsQuery->where('category_id', $selectedCategory);
+                $archivedEventsQuery = $archivedEventsQuery->where('category_id', $selectedCategory);
             }
+
+            $currentEvents = $currentEventsQuery->orderBy('date', 'asc')->get();
+            $archivedEvents = $archivedEventsQuery->orderBy('date', 'desc')->get();
+
         } catch (\Exception $e) {
-            redirect()->route('home');
+            return redirect()->route('home')->with('error', 'An error occurred.');
         }
 
-        return view('events.my_events', compact('events', 'categories', 'selectedCategory'));
+        return view('events.my_events', compact('currentEvents', 'archivedEvents', 'categories', 'selectedCategory'));
     }
-
 }
