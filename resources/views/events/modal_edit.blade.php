@@ -67,6 +67,14 @@
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                required>
                     </div>
+                    <div id="ticketTypesWithPrices">
+                        @foreach($ticketTypes as $ticketType)
+                            <div>
+                                <label for="ticket_types[{{ $ticketType->id }}][price]">{{ $ticketType->name }}</label>
+                                <input type="text" name="ticket_types[{{ $ticketType->id }}][price]" id="ticket_types[{{ $ticketType->id }}][price]" value="{{ old('ticket_types.' . $ticketType->id . '.price') }}" required>
+                            </div>
+                        @endforeach
+                    </div>
                     <div class="form-group">
                         <label for="imageEdit"
                                class="block text-sm font-medium text-gray-700">{{ __('events.image') }}</label>

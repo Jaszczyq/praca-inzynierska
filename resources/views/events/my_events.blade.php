@@ -164,12 +164,14 @@
                             params.append('categories[]', selectedCategories[i]);
                         }
 
+                        var paramsString = params.toString();
+
                         // Wyślij żądanie AJAX do serwera
-                        fetch('/events/filter?' + params.toString())
+                        fetch('/events/filter?myEvents=true' + (paramsString !== '' ? '&' + paramsString : ''))
                             .then(response => response.text())
                             .then(data => {
                                 // Aktualizuj listę wydarzeń na stronie
-                                document.getElementById('event-list').innerHTML = data;
+                                document.getElementById('my-event-list').innerHTML = data;
                             });
                     }
 
@@ -184,9 +186,9 @@
                 </script>
             </div>
 
-            @foreach ($currentEvents->merge($archivedEvents)->sortBy('date') as $event)
-                <div class="{{ $event->date->isPast() ? 'bg-gray-200' : '' }}">
-                    <ul id="my-event-list" class="list-group" style="border:none">
+            <ul id="my-event-list" class="list-group" style="border:none">
+                @foreach ($currentEvents->merge($archivedEvents)->sortBy('date') as $event)
+                    <div class="{{ $event->date->isPast() ? 'bg-gray-200' : '' }}">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg"
                              style="border-radius: 5px; margin: 10px 0">
                             <div class="wyd-szukaj-table">
@@ -241,7 +243,7 @@
                                     <div
                                         class="row-cell cell-wyd-lista-5 my-auto p-4 w-30 table-cell align-middle line-height-normal text-center">
                                         <div class="flex flex-row justify-center h-full">
-                                            @if ($event->date->isFuture() || $event->date->isToday())
+                                            @if ($event->date->isFuture() || ($event->date->isToday() && $event->time >= \Carbon\Carbon::now()->format('H:i')))
                                                 <a href="#"
                                                    onclick="openModalEdit({{ $event->id }}); event.preventDefault();"
                                                    class="bg-white border-white btn btn-primary edit-button mr-4">
@@ -279,9 +281,9 @@
                                 </div>
                             </div>
                         </div>
-                    </ul>
-                </div>
-            @endforeach
+                    </div>
+                @endforeach
+            </ul>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -289,15 +291,15 @@
             var searchCity = $("#search-city").val();
             var searchTitle = $("#search-title").val();
 
-            var searchQuery = "";
+            var searchQuery = "?mySearch=true";
             if (searchCity) {
-                searchQuery += "?city=" + searchCity;
+                searchQuery += "&city=" + searchCity;
             }
             if (searchTitle) {
                 if (searchQuery) {
                     searchQuery += "&title=" + searchTitle;
                 } else {
-                    searchQuery += "?title=" + searchTitle;
+                    searchQuery += "&title=" + searchTitle;
                 }
             }
 
@@ -305,7 +307,7 @@
                 url: "/events/search" + searchQuery,
                 method: "GET",
                 success: function (response) {
-                    $("#event-list").html(response);
+                    $("#my-event-list").html(response);
                 }
             });
         }
@@ -366,6 +368,26 @@
         }
     </script>
 
+    @component('events.modal_create', ['categories' => $categories])
+    @endcomponent
+    <script>
+        var modal = document.getElementById("modal_create");
+
+        function openModal() {
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Zakładamy, że masz przycisk edycji dla każdego wydarzenia z atrybutem data-id ustawionym na id wydarzenia
@@ -379,33 +401,6 @@
                     $('#modal_edit .modal-content').html(data);
                     $('#modal_edit').show();
                 }
-            });
-        });
-
-        $(document).ready(function () {
-            let timeout;
-
-            $(document).ready(function () {
-                let timeout;
-
-                $("#search").on("keyup", function () {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        var searchQuery = $(this).val();
-
-                        if (searchQuery === '') {
-                            searchQuery = 'all';
-                        }
-
-                        $.ajax({
-                            url: "/events/search/" + searchQuery,
-                            method: "GET",
-                            success: function (response) {
-                                $("#event-list").html(response);
-                            }
-                        });
-                    }, 300);
-                });
             });
         });
     </script>
@@ -446,6 +441,20 @@
                     selectElement.value = data.category_id;
                     document.getElementById("dateEdit").value = data.date.split('T')[0];
                     document.getElementById("timeEdit").value = data.time;
+
+                    //console.log(data);
+                    var ticketPrices = data.ticket_types;
+
+                    for (var i = 0; i < ticketPrices.length; i++) {
+                        var ticketTypeId = ticketPrices[i].id;
+                        var ticketValue = ticketPrices[i].pivot.price;
+
+                        //console.log(ticketTypeId);
+                        //console.log(ticketValue);
+                        //console.log(document.getElementsByName("ticket_types[" + ticketTypeId + "][price]")[1]);
+
+                        document.getElementsByName("ticket_types[" + ticketTypeId + "][price]")[1].value = ticketValue;
+                    }
                 });
         }
 
@@ -467,9 +476,9 @@
 
         var edit_url = "{{ route('event.update', ':id') }}";
 
-        document.getElementById("eventEditForm").addEventListener("submit", function (event) {
+        document.getElementById("eventRestoreForm").addEventListener("submit", function (event) {
             event.preventDefault();
-            var url = edit_url.replace(':id', document.getElementById("id_event").value);
+            var url = edit_url.replace(':id', document.querySelectorAll("[id=id_event]")[1].value);
 
             fetch(url, {
                 method: 'POST',
@@ -488,15 +497,29 @@
             fetch('/events/' + id)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById("id_event").value = data.id;
-                    document.getElementById("titleEdit").value = data.title;
-                    document.getElementById("descriptionEdit").value = data.description;
-                    document.getElementById("cityEdit").value = data.city;
-                    document.getElementById("placeEdit").value = data.place;
-                    var selectElement = document.getElementById("categoryEdit");
+                    document.querySelectorAll("[id=id_event]")[1].value = data.id;
+                    document.querySelectorAll("[id=titleEdit]")[1].value = data.title;
+                    document.querySelectorAll("[id=descriptionEdit]")[1].value = data.description;
+                    document.querySelectorAll("[id=cityEdit]")[1].value = data.city;
+                    document.querySelectorAll("[id=placeEdit]")[1].value = data.place;
+
+                    var ticketPrices = data.ticket_types;
+
+                    for (var i = 0; i < ticketPrices.length; i++) {
+                        var ticketTypeId = ticketPrices[i].id;
+                        var ticketValue = ticketPrices[i].pivot.price;
+
+                        //console.log(ticketTypeId);
+                        //console.log(ticketValue);
+                        //console.log(document.getElementsByName("ticket_types[" + ticketTypeId + "][price]")[1]);
+
+                        document.getElementsByName("ticket_types[" + ticketTypeId + "][price]")[2].value = ticketValue;
+                    }
+
+                    var selectElement = document.querySelectorAll("[id=categoryEdit]")[1];
                     selectElement.value = data.category_id;
-                    document.getElementById("dateEdit").value = data.date.split('T')[0];
-                    document.getElementById("timeEdit").value = data.time;
+                    //document.querySelectorAll("[id=dateEdit]")[1].value = data.date.split('T')[0];
+                    //document.querySelectorAll("[id=timeEdit]")[1].value = data.time;
                 });
         }
 

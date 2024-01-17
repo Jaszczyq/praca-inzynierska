@@ -57,9 +57,17 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+        var buyUrlTemplate = "{{ route('seats', ':id') }}";
+
+        var currentBuyUrl = buyUrlTemplate.replace(':id', -1);
+
         var modalDetails = document.getElementById("modal_details");
 
         const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+
+        document.getElementById("buyButton").addEventListener("click", function () {
+            window.location.href = currentBuyUrl;
+        });
 
         function openModalDetails(id) {
             modalDetails.style.display = "block";
@@ -74,6 +82,7 @@
                     document.getElementById("event_date").textContent = new Date(data.date).toLocaleDateString('pl-PL', options);
                     document.getElementById("event_time").textContent = data.time;
                     document.getElementById("event_categories").textContent = data.category;
+                    currentBuyUrl = buyUrlTemplate.replace(':id', id);
                 });
         }
 
@@ -82,7 +91,7 @@
         }
 
         window.onclick = function (event) {
-            if (event.target == modalDetails) {
+            if (event.target === modalDetails) {
                 modalDetails.style.display = "none";
             }
         }

@@ -66,20 +66,30 @@
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                required>
                     </div>
-                    <div class="form-group">
-                        <label for="ticket_type_1">Typ biletu</label>
-                        <select id="ticket_type_1" name="ticket_types[1][id]">
-                            <option value="1">Normalny</option>
-                            <option value="2">Ulgowy</option>
-                            <option value="3">Dla dzieci</option>
-                            <option value="4">Grupowy</option>
-                        </select>
+
+                    <div id="ticketTypesWithPrices">
+                        @foreach($ticketTypes as $ticketType)
+                            <div>
+                                <label for="ticket_types[{{ $ticketType->id }}][price]">{{ $ticketType->name }}</label>
+                                <input type="text" name="ticket_types[{{ $ticketType->id }}][price]" id="ticket_types[{{ $ticketType->id }}][price]" value="{{ old('ticket_types.' . $ticketType->id . '.price') }}" required>
+                            </div>
+                        @endforeach
                     </div>
 
-                    <div class="form-group">
-                        <label for="ticket_price_1">Cena biletu</label>
-                        <input type="number" id="ticket_price_1" name="ticket_types[1][price]">
-                    </div>
+{{--                    <div class="form-group">--}}
+{{--                        <label for="ticket_type_1">Typ biletu</label>--}}
+{{--                        <select id="ticket_type_1" name="ticket_types[1][id]">--}}
+{{--                            <option value="1">Normalny</option>--}}
+{{--                            <option value="2">Ulgowy</option>--}}
+{{--                            <option value="3">Dla dzieci</option>--}}
+{{--                            <option value="4">Grupowy</option>--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+
+{{--                    <div class="form-group">--}}
+{{--                        <label for="ticket_price_1">Cena biletu</label>--}}
+{{--                        <input type="number" id="ticket_price_1" name="ticket_types[1][price]">--}}
+{{--                    </div>--}}
 
                     <!-- ... możesz dodać więcej pól do wprowadzenia więcej typów biletów ... -->
                     <div class="form-group">

@@ -122,6 +122,7 @@
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/laravel/ui" />
       <path value="$PROJECT_DIR$/vendor/spatie/laravel-permission" />
+      <path value="$PROJECT_DIR$/vendor/mckenziearts/laravel-notify" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

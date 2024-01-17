@@ -107,7 +107,7 @@
                                 {{ __('events.category') }}
                             </button>
                             <div id="checkboxList" class="hidden mt-2 bg-white border rounded p-2">
-                                <div class="grid grid-cols-2 gap-2">
+                                <div class="grid grid-cols-1 gap-2">
                                     @foreach($categories as $category)
                                         <div class="flex items-center ml-2 mb-2">
                                             <input type="checkbox" id="category_{{ $category->id }}" name="categories[]"
@@ -328,6 +328,16 @@
                         document.getElementById("event_date").textContent = new Date(data.date).toLocaleDateString('pl-PL', options);
                         document.getElementById("event_time").textContent = data.time;
                         document.getElementById("event_categories").textContent = data.category;
+
+                        /*var ticketPrices = data.ticket_prices;
+
+                        for (var i = 0; i < ticketPrices.length; i++) {
+                            var ticketTypeId = ticketPrices[i].id;
+                            var ticketValue = ticketPrices[i].pivot.price;
+
+                            document.getElementById("ticket_types[" + ticketTypeId + "][price]").value = ticketValue;
+                        }*/
+
                         currentBuyUrl = buyUrlTemplate.replace(':id', id);
                     });
             }
@@ -357,7 +367,7 @@
             }
 
             window.onclick = function (event) {
-                if (event.target == modal) {
+                if (event.target === modal) {
                     modal.style.display = "none";
                 }
             }

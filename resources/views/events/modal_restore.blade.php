@@ -4,7 +4,7 @@
         <div class="fixed inset-0 bg-gray-500 opacity-75"></div>
         <div
             class="inline-block p-5 align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form id="eventEditForm">
+            <form id="eventRestoreForm">
                 @csrf
                 <div class="mb-4">
                     <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
@@ -66,6 +66,14 @@
                         <input type="time" name="time" id="timeEdit"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                required>
+                    </div>
+                    <div id="ticketTypesWithPrices">
+                        @foreach($ticketTypes as $ticketType)
+                            <div>
+                                <label for="ticket_types[{{ $ticketType->id }}][price]">{{ $ticketType->name }}</label>
+                                <input type="text" name="ticket_types[{{ $ticketType->id }}][price]" id="ticket_types[{{ $ticketType->id }}][price]" value="{{ old('ticket_types.' . $ticketType->id . '.price') }}" required>
+                            </div>
+                        @endforeach
                     </div>
                     <div class="form-group">
                         <label for="imageEdit"

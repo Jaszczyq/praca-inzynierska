@@ -8,6 +8,7 @@ use App\Models\Hall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class EventController extends Controller
@@ -51,12 +52,18 @@ class EventController extends Controller
     public function search(Request $request)
     {
 
-        $title = $request->query('title');
-        $city = $request->query('city');
+        $title = $request->query('title') ?? '';
+        $city = $request->query('city') ?? '';
 
-        $events = Event::where('title', 'like', '%' . $title . '%')->where('city', 'like', '%' . $city . '%')->whereDate('date', '>=', Carbon::now())->get();
+        $myEvents = $request->query('mySearch');
 
-        return view('events.search_results', ['events' => $events]);
+        if($myEvents) {
+            $events = Event::where('added_by', Auth::user()->id)->where('title', 'like', '%' . $title . '%')->where('city', 'like', '%' . $city . '%')->get();
+            return view('events.my_search_results', ['events' => $events]);
+        } else {
+            $events = Event::where('title', 'like', '%' . $title . '%')->where('city', 'like', '%' . $city . '%')->get();
+            return view('events.search_results', ['events' => $events]);
+        }
     }
 
     public function sort(Request $request, string $by, string $order)
@@ -77,32 +84,55 @@ class EventController extends Controller
             'place' => 'required',
             'city' => 'required',
             'category' => 'required',
+            'ticket_types.*.id' => 'sometimes|required|exists:ticket_types,id',
+            'ticket_types.*.price' => 'sometimes|required|numeric|min:0',
         ]);
 
+        \Log::info($request->all());
         $imagePath = $request->file('image')->store('public/images');
-        $imagePath = str_replace('public/', '', $imagePath); // usuwamy public z ścieżki, aby była ona dostępna publicznie
+        $imagePath = str_replace('public/', '', $imagePath); // usuwamy 'public/' z ścieżki, aby była dostępna publicznie
 
-        $event = new Event();
+        $event = new Event([
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'],
+            'place' => $validatedData['place'],
+            'date' => \Carbon\Carbon::parse($validatedData['date'] . ' ' . $validatedData['time'])->format('Y-m-d'),
+            'time' => \Carbon\Carbon::parse($validatedData['date'] . ' ' . $validatedData['time'])->format('H:i:s'),
+            'image' => asset('storage/' . $imagePath),
+            'city' => $validatedData['city'],
+            'category_id' => $validatedData['category'],
+            'added_by' => Auth::user()->id,
+        ]);
 
-        $event->title = $validatedData['title'];
-        $event->description = $validatedData['description'];
-        $event->place = $validatedData['place'];
-        $event->date = \Carbon\Carbon::parse($validatedData['date'] . ' ' . $validatedData['time'])->format('Y-m-d');
-        $event->time = \Carbon\Carbon::parse($validatedData['date'] . ' ' . $validatedData['time'])->format('H:i:s');
-        $event->image = asset('storage/' . $imagePath);
-        $event->city = $validatedData['city'];
-        $event->category_id = $validatedData['category'];
-        $event->added_by = Auth::user()->id;
+        //dd($validatedData['ticket_types']);
 
         $event->save();
 
-        $event->categories()->attach($validatedData['category']);
+        $event_id = $event->id;
 
-        foreach ($request->input('ticket_types') as $ticketTypeData) {
-            $event->ticketTypes()->attach($ticketTypeData['id'], ['price' => $ticketTypeData['price']]);
+        foreach ($validatedData['ticket_types'] as $ticketTypeId => $ticketTypeData) {
+            DB::table('event_ticket_types')->insert([
+                'event_id' => $event_id,
+                'ticket_type_id' => $ticketTypeId,
+                'price' => $ticketTypeData['price'],
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
         }
 
-        return redirect()->route('events.index');
+
+        $event->categories()->attach($validatedData['category']);
+
+        // Dodawanie cen biletów dla wydarzenia
+        /*foreach ($validatedData['ticket_types'] as $ticketTypeData) {
+            $event->ticketTypes()->attach($ticketTypeData['id'], [
+                'price' => $ticketTypeData['price'],
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }*/
+
+        return redirect()->route('events.index')->with('success', 'Event added successfully.');
     }
 
     /**
@@ -119,6 +149,7 @@ class EventController extends Controller
         }
 
         $event->category = $event->categories->pluck('name');
+        $event->ticketTypes = $event->ticketTypes->pluck('name');
 
         //return JASON
         return response()->json($event);
@@ -156,23 +187,32 @@ class EventController extends Controller
             return response()->json(['error' => 'Nie znaleziono wydarzenia'], 404);
         }
 
-        dd($event);
-
-        $event->delete();
+        $event->forcedelete();
         return response()->json(['success' => 'Wydarzenie zostało usunięte'], 200);
     }
 
     public function filter(Request $request) {
         $categories = $request->input('categories');
+        $myEvents = $request->input('myEvents');
 
-        if (empty($categories)) {
-            $events = Event::whereDate('date', '>=', Carbon::now())->get();
+        if($myEvents) {
+            if (empty($categories)) {
+                $events = Event::where('added_by', Auth::user()->id)->get();
+            } else {
+                $events = Event::where('added_by', Auth::user()->id)->whereIn('category_id', $categories)->get();
+            }
+
+            return view('events.my_search_results', ['events' => $events]);
         }
         else {
-            $events = Event::whereIn('category_id', $categories)->whereDate('date', '>=', Carbon::now())->get();
-        }
+            if (empty($categories)) {
+                $events = Event::get();
+            } else {
+                $events = Event::whereIn('category_id', $categories)->get();
+            }
 
-        return view('events.search_results', ['events' => $events]);
+            return view('events.search_results', ['events' => $events]);
+        }
     }
 
     /**
@@ -203,6 +243,7 @@ class EventController extends Controller
         }
 
         $event->save();
+        $event->restore();
 
         return redirect()->route('events.index')->with('success', 'Event updated successfully');
     }

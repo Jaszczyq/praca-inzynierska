@@ -12,10 +12,12 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'date', 'time', 'image, added_by'];
+    protected $fillable = ['title', 'description', 'place', 'city', 'date', 'time', 'image', 'added_by', 'category_id'];
 
     protected $attributes = [
-        'place' => 'default'
+        'place' => 'default',
+        'city' => 'default',
+        'image' => 'default'
     ];
 
     public function categories()
@@ -33,12 +35,10 @@ class Event extends Model
 
     public function ticketTypes()
     {
-        // Zwraca relację many-to-many z modelu TicketType
-        // za pomocą tabeli łączącej 'event_ticket_type'
-        // Zakładamy, że kolumny w tej tabeli to 'event_id' i 'ticket_type_id'
         return $this->belongsToMany(TicketType::class, 'event_ticket_types', 'event_id', 'ticket_type_id')
             ->withPivot('price');
     }
+
 
     public function getDateAttribute($value)
     {
