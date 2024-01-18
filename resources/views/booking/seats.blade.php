@@ -63,11 +63,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 40px;
-            height: 40px;
+            width: 3%;
+            height: 3%;
             margin: 5px;
             position: relative;
             padding: 0px;
+            max-width: 40px;
+            max-height: 40px;
         }
 
         .seat .seat_container {
@@ -156,22 +158,22 @@
                                 @if($column == $left_side)
                                     <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
                                             style="margin-right: 20px;">
-                                        @elseif($column == $columns - $right_side + 1)
-                                            <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
-                                                    style="margin-left: 20px;">
-                                                @else
-                                                    <button class="seat available" id="seat_{{ $row }}_{{ $column }}">
-                                                        @endif
-                                                        <div class="seat_container">
-                                                    <span id="seat_nr_{{ $row }}_{{ $column }}"
-                                                          style="display: none; color: white !important;">{{$column}}</span>
-                                                            <img src="{{url('/images/events/couch-solid.png')}}"
-                                                                 alt="Seat">
-                                                        </div>
-                                                    </button>
-                                    @endfor
-                                    @endfor
+                                @elseif($column == $columns - $right_side + 1)
+                                    <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
+                                            style="margin-left: 20px;">
+                                @else
+                                    <button class="seat available" id="seat_{{ $row }}_{{ $column }}">
+                                @endif
+                                        <div class="seat_container">
+                                            <span id="seat_nr_{{ $row }}_{{ $column }}"
+                                          style="display: none; color: white !important;">{{$column}}</span>
+                                            <img src="{{url('/images/events/couch-solid.png')}}"
+                                                 alt="Seat">
+                                        </div>
+                                    </button>
+                            @endfor
                         </div>
+                    @endfor
                 </div>
             </div>
             <div class="mt-4">

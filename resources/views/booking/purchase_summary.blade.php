@@ -134,7 +134,20 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+        function saveToLocalStorage() {
+            let ticketsData = [];
+
+            document.querySelectorAll('select[id^="select_ticket_"]').forEach((select, index) => {
+                let price = document.getElementById(`ticket_price_${index}`).innerText;
+                ticketsData.push({ type: select.value, price: price });
+            });
+
+            localStorage.setItem('selectedTickets', JSON.stringify(ticketsData));
+        }
+
         function calculateTotalPrice() {
+            saveToLocalStorage();
+
             let total = 0;
             let selectedTickets = document.querySelectorAll('select[id^="select_ticket_"]');
             let ticketSummary = {};

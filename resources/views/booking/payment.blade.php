@@ -110,6 +110,12 @@
         // select payment method on click
         const paymentMethods = document.querySelectorAll('.payment-method')
 
+        var ticketsData = loadFromLocalstorage('selectedTickets');
+        var price = 0;
+        ticketsData.forEach(ticket => {
+            price += parseFloat(ticket.price);
+        });
+
         paymentMethods.forEach(paymentMethod => {
             paymentMethod.addEventListener('click', () => {
                 paymentMethods.forEach(paymentMethod => {
@@ -120,6 +126,10 @@
                 document.getElementById('pay-button').disabled = false;
             })
         });
+
+        function loadFromLocalstorage(key) {
+            return JSON.parse(localStorage.getItem(key));
+        }
 
         function payButton() {
             var url = "/payment/confirm";
@@ -134,7 +144,9 @@
                 var paymentMethod = selectedPaymentMethod.querySelector('img').alt;
 
                 var data = {
-                    paymentMethod: paymentMethod
+                    paymentMethod: paymentMethod,
+                    eventId: {{ $event->id }},
+                    price: price
                 };
 
                 fetch(url, {
@@ -144,7 +156,12 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify(data)
-                }).then()
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    console.log(data);
+                    location.replace(data.url);
+                })
             }
         }
     </script>

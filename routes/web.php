@@ -86,5 +86,10 @@ Route::post('/halls', [HallsController::class, 'saveHall'])->name('booking.save_
 Route::post('/seats_creator', [EventController::class, 'saveHall'])->name('seats_creator.save');
 
 Route::post('/payment/confirm', [PurchaseController::class, 'confirmPayment'])->name('payment.confirm');
+Route::get('/payment/{transaction_id}/gateway', [PurchaseController::class, 'payment'])->name('payment.transaction');
+Route::get('/payment/{transaction_id}/success', [PurchaseController::class, 'successPayment'])->name('payment.success');
+Route::get('/payment/{transaction_id}/fail', [PurchaseController::class, 'failPayment'])->name('payment.fail');
+Route::get('/payment/{transaction_id}/pending', [PurchaseController::class, 'pendingPayment'])->name('payment.pending');
+Route::get('/payment/{transaction_id}/no_payment', [PurchaseController::class, 'noPayment'])->name('payment.no_payment');
 
 Route::get('/debug_mail', [ForgotPasswordController::class, 'debugMail'])->name('mail.debug');
