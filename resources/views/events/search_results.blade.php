@@ -1,18 +1,18 @@
 @php
     function translateMonths($dateString) {
         $months = [
-            'January' => 'Styczeń',
-            'February' => 'Luty',
-            'March' => 'Marzec',
-            'April' => 'Kwiecień',
-            'May' => 'Maj',
-            'June' => 'Czerwiec',
-            'July' => 'Lipiec',
-            'August' => 'Sierpień',
-            'September' => 'Wrzesień',
-            'October' => 'Październik',
-            'November' => 'Listopad',
-            'December' => 'Grudzień',
+                   'January' => 'stycznia',
+                     'February' => 'lutego',
+                     'March' => 'marca',
+                     'April' => 'kwietnia',
+                     'May' => 'maja',
+                     'June' => 'czerwca',
+                     'July' => 'lipca',
+                     'August' => 'sierpnia',
+                     'September' => 'września',
+                     'October' => 'października',
+                     'November' => 'listopada',
+                     'December' => 'grudnia',
         ];
 
         return str_replace(

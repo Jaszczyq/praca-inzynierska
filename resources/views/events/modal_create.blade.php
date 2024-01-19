@@ -76,22 +76,6 @@
                         @endforeach
                     </div>
 
-{{--                    <div class="form-group">--}}
-{{--                        <label for="ticket_type_1">Typ biletu</label>--}}
-{{--                        <select id="ticket_type_1" name="ticket_types[1][id]">--}}
-{{--                            <option value="1">Normalny</option>--}}
-{{--                            <option value="2">Ulgowy</option>--}}
-{{--                            <option value="3">Dla dzieci</option>--}}
-{{--                            <option value="4">Grupowy</option>--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-
-{{--                    <div class="form-group">--}}
-{{--                        <label for="ticket_price_1">Cena biletu</label>--}}
-{{--                        <input type="number" id="ticket_price_1" name="ticket_types[1][price]">--}}
-{{--                    </div>--}}
-
-                    <!-- ... możesz dodać więcej pól do wprowadzenia więcej typów biletów ... -->
                     <div class="form-group">
                         <label for="image"
                                class="block text-sm font-medium text-gray-700">{{ __('events.image') }}</label>

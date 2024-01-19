@@ -68,31 +68,31 @@
     @endcomponent
 
     <div id="errorPopup" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 m-auto w-fit hidden" role="alert">
-        <span class="font-medium">Błąd!</span> Wystąpił błąd podczas zapisu.
+        <span class="font-medium">{{ __('creator.error') }}</span> {{ __('creator.save_error') }}
     </div>
     <div id="successPopup" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 m-auto w-fit hidden" role="alert">
-        <span class="font-medium">Udało się!</span> Zapisano salę.
+        <span class="font-medium">{{ __('creator.success') }}</span> {{ __('creator.save_success') }}
     </div>
     <div class="flex justify-center items-center mt-8">
         <form id="cinemaHallForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" autocomplete="off">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="hallNameInput">
-                    Nazwa Sali:
+                    {{ __('creator.hall_name') }}
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="hallNameInput" name="hallName" required>
             </div>
             <div class="mb-4">
-                <span class="text-gray-700 text-sm font-bold mb-2">Opcje:</span>
+                <span class="text-gray-700 text-sm font-bold mb-2">{{ __('creator.options') }}</span>
                 <div class="mb-2">
                     <label class="inline-flex items-center">
                         <input type="radio" class="form-radio" name="option" value="load" checked>
-                        <span class="ml-2">Wczytaj z bazy</span>
+                        <span class="ml-2">{{ __('creator.load_from_db') }}</span>
                     </label>
                 </div>
                 <div class="mb-2">
                     <label class="inline-flex items-center">
                         <input type="radio" class="form-radio" name="option" value="generate">
-                        <span class="ml-2">Generuj nowe</span>
+                        <span class="ml-2">{{ __('creator.generate_new') }}</span>
                     </label>
                 </div>
             </div>
@@ -106,42 +106,42 @@
                             <option value="{{ $hall->id }}">{{ $hall->name }}</option>
                         @endforeach
                     @elseif (count($halls) == 0)
-                        <option value="">Brak sal w bazie</option>
+                        <option value="">{{ __('creator.no_halls_in_db') }}</option>
                     @endif
                 </select>
                 <div class="flex items-center justify-between">
                     <button id="loadHallButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-auto">
-                        Wczytaj Salę
+                        {{ __('creator.load_hall') }}
                     </button>
                 </div>
             </div>
             <div class="mb-4 hidden" id="hallGenerateContainer">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="rowsInput">
-                        Rzędy:
+                        {{ __('creator.rows') }}
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" id="rowsInput" name="rows" min="1" required>
                 </div>
                 <div class="mb-6">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="columnsInput">
-                        Kolumny:
+                        {{ __('creator.columns') }}
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" id="columnsInput" name="columns" min="1" required>
                 </div>
                 <div class="flex items-center justify-between mb-4">
                     <button id="generateHallButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-auto">
-                        Generuj Salę
+                        {{ __('creator.generate_hall') }}
                     </button>
                 </div>
             </div>
             <div class="flex items-center justify-between mb-4">
                 <button id="openSectionEditButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-auto">
-                    Otwórz edytor sekcji
+                    {{ __('creator.open_section_editor') }}
                 </button>
             </div>
             <div class="flex items-center justify-between mt-4">
                 <button id="saveButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-auto">
-                    Zapisz
+                    {{ __('creator.save') }}
                 </button>
             </div>
         </form>

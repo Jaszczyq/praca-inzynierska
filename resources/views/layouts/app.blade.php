@@ -45,7 +45,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 {{ request()->routeIs('events.index') ? 'underline text-blue-700' : '' }} rounded md:p-0"
+                        <a class="{{ request()->routeIs('events.index') ? 'active-tab' : 'nav-link' }} block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 rounded md:p-0"
                            href="{{ route('events.index') }}">{{ __('events.events') }}</a>
                     </li>
                 </ul>
@@ -107,7 +107,23 @@
         $categories = App\Models\EventCategory::all();
     @endphp
 
+<style>
+    .active-tab {
+        position: relative;
+        font-weight: bold; /* Pogrubienie tekstu */
+        color: #1D4ED8; /* Tailwind kolor text-blue-700 */
+    }
 
+    .active-tab::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -0.5rem; /* większy odstęp od tekstu */
+        height: 2px; /* wysokość kreski */
+        background: #1D4ED8; /* Tailwind kolor bg-blue-700 */
+    }
+</style>
 </div>
 </body>
 </html>

@@ -28,14 +28,6 @@ class PurchaseController extends Controller
     {
         $event = Event::find($event_id);
 
-        /*if($event->added_by == Auth::user()->id) {
-            abort(403);
-        }*/
-
-        /*
-        $ticket_ids = explode(',', $ticket_ids);
-        $selectedTickets = TicketType::whereIn('id', $ticket_ids)->get();
-        */
         $seats = explode(',', $seats_ids);
 
         return view('booking.purchase_summary', ['event' => $event, 'selectedSeats' => $seats]);

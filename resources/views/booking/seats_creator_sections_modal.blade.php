@@ -24,17 +24,17 @@
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle max-w-4xl sm:w-full">
             <!-- Nagłówek modala -->
             <div class="bg-gray-100 px-4 py-3 sm:px-6">
-                <span class="text-gray-700 text-lg leading-6 font-medium">Zarządzanie Sekcjami</span>
+                <span class="text-gray-700 text-lg leading-6 font-medium">{{ __('creator.managing_sections') }}</span>
                 <span class="absolute top-0 right-0 pt-4 pr-4">
                     <button type="button" class="text-gray-400 hover:text-gray-500" onclick="closeSectionModal()">
-                        <span class="sr-only">Zamknij</span>
+                        <span class="sr-only">{{ __('creator.close') }}</span>
                         &times;
                     </button>
                 </span>
             </div>
             <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="mt-2">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3" onclick="addSectionToModal()">Dodaj Sekcję</button>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3" onclick="addSectionToModal()">{{ __('creator.add_section') }}</button>
                     <div id="sectionList" class="mt-4">
                         <!-- Lista sekcji -->
                     </div>
@@ -46,10 +46,10 @@
 
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 <button onclick="generatePreview()" class="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                    Wygeneruj Podgląd
+                    {{ __('creator.generate_preview') }}
                 </button>
                 <button onclick="closeSectionModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
-                    Zamknij
+                    {{ __('creator.close') }}
                 </button>
             </div>
         </div>

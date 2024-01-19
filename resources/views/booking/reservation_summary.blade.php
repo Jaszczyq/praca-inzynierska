@@ -62,9 +62,9 @@
                         @foreach ($selectedSeats as $seat)
                             @php $seat_part = explode('_', $seat); @endphp
                             <li style="font-size: 1rem;margin-bottom: 10px;">
-                                <span>Rząd: {{ $seat_part[0] }}</span>
-                                <span style="margin-left: 10px;">Miejsce: {{ $seat_part[1] }}</span>
-                                <span style="margin-left: 10px;">Typ biletu:
+                                <span>{{__('summary.row')}} {{ $seat_part[0] }}</span>
+                                <span style="margin-left: 10px;">{{__('summary.seat')}} {{ $seat_part[1] }}</span>
+                                <span style="margin-left: 10px;">{{__('summary.ticket_type')}}
         <select style="border-radius: 5px; background-color: #F4F4F7;" id="select_ticket_{{$id}}" onchange="calculateTotalPrice()">
             @php
                 $types = TicketType::all();
@@ -78,7 +78,7 @@
         </select>
     </span>
                                 <span id="ticket_price_{{$id}}"
-                                      style="margin-left: 10px; font-weight: bold; text-transform: uppercase">0 zł</span>
+                                      style="margin-left: 10px; font-weight: bold; text-transform: uppercase">{{__('summary.pln')}}</span>
                             </li>
                             @php $id++; @endphp
                         @endforeach
@@ -116,10 +116,10 @@
                 <div id="ticket_summary" style="background-color: #F4F4F7; border-radius: 10px; padding: 20px;">
                 </div>
                 <div style="font-size: 15pt; margin-top: 20px; display: flex; justify-content: space-between;">
-                    <h2 style="font-weight: bold; text-transform: uppercase">Razem do zapłaty:</h2>
-                    <h2 style="font-weight: bold; text-transform: uppercase"><span id="totalPrice"></span> zł</h2>
+                    <h2 style="font-weight: bold; text-transform: uppercase">{{__('summary.total_price')}}</h2>
+                    <h2 style="font-weight: bold; text-transform: uppercase"><span id="totalPrice"></span> {{__('summary.pln')}}</h2>
                 </div>
-                <button id="reserveTicketButton" style="width: 100%; background-color: #1E90FF; color: white; padding: 14px 20px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer;">Rezerwuj Bilet</button>
+                <button id="reserveTicketButton" style="width: 100%; background-color: #1E90FF; color: white; padding: 14px 20px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer;">{{__('summary.reserve_ticket')}}</button>
                 </div>
         </div>
     </div>

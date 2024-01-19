@@ -109,7 +109,8 @@
     </style>
     <link rel="stylesheet" type="text/css" href="resources/css/seats.css">
 
-    <div class="event-details bg-white" style="align-self: flex-start; border: 1px solid #e2e8f0; border-radius: 5px; padding: 20px 100px; width: 100%; box-sizing: border-box;">
+    <div class="event-details bg-white"
+         style="align-self: flex-start; border: 1px solid #e2e8f0; border-radius: 5px; padding: 20px 100px; width: 100%; box-sizing: border-box;">
         <div style="display: flex; justify-content: space-between;">
             <p style="font-size: .9rem;font-weight: bold; text-transform: uppercase; display: flex; align-items: center;">
             <span style="display: inline-block; margin-right: 10px;">
@@ -158,27 +159,27 @@
                                 @if($column == $left_side)
                                     <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
                                             style="margin-right: 20px;">
-                                @elseif($column == $columns - $right_side + 1)
-                                    <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
-                                            style="margin-left: 20px;">
-                                @else
-                                    <button class="seat available" id="seat_{{ $row }}_{{ $column }}">
-                                @endif
-                                        <div class="seat_container">
+                                        @elseif($column == $columns - $right_side + 1)
+                                            <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
+                                                    style="margin-left: 20px;">
+                                                @else
+                                                    <button class="seat available" id="seat_{{ $row }}_{{ $column }}">
+                                                        @endif
+                                                        <div class="seat_container">
                                             <span id="seat_nr_{{ $row }}_{{ $column }}"
-                                          style="display: none; color: white !important;">{{$column}}</span>
-                                            <img src="{{url('/images/events/couch-solid.png')}}"
-                                                 alt="Seat">
-                                        </div>
-                                    </button>
-                            @endfor
+                                                  style="display: none; color: white !important;">{{$column}}</span>
+                                                            <img src="{{url('/images/events/couch-solid.png')}}"
+                                                                 alt="Seat">
+                                                        </div>
+                                                    </button>
+                                    @endfor
                         </div>
                     @endfor
                 </div>
             </div>
             <div class="mt-4">
-                <button class="btn btn-primary" id="reserve-btn" disabled>Rezerwuj</button>
-                <button class="btn btn-success" id="buy-btn" disabled>Kup bilet</button>
+                <button class="btn btn-primary" id="reserve-btn" disabled>{{__('booking.reserve')}}</button>
+                <button class="btn btn-success" id="buy-btn" disabled>{{__('booking.buy_tickets')}}</button>
             </div>
         </div>
 

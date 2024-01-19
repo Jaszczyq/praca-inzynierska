@@ -76,6 +76,44 @@
                         </div>
                     </div>
 
+                    <div class="space-x-2 flex justify-start items-center w-full">
+                        <button onclick="toggleCheckboxList()"
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 512 512" stroke="currentColor">
+                                <!-- Zastąp poniższe ścieżki odpowiednimi dla Twojego SVG -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
+                            {{ __('events.category') }}
+                        </button>
+                        <div id="checkboxList" class="hidden mt-2 bg-white border rounded p-2">
+                            <div class="grid grid-cols-1 gap-2">
+                                @foreach($categories as $category)
+                                    <div class="flex items-center ml-2 mb-2">
+                                        <input type="checkbox" id="category_{{ $category->id }}" name="categories[]"
+                                               value="{{ $category->id }}" onchange="filterEvents()">
+                                        <label for="category_{{ $category->id }}"
+                                               class="ml-2 text-sm font-medium text-gray-900">{{ $category->name }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="flex justify-start items-center w-full">
+                            <select name="sort" id="sort"
+                                    class="mr-2 min-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                                    onchange="sort()">
+                                <option value="date" selected="">{{ __('events.sort_date') }}</option>
+                                <option value="title">{{ __('events.sort_title') }}</option>
+                                <option value="city">{{ __('events.sort_city') }}</option>
+                            </select>
+                            <select name="order" id="order"
+                                    class="w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                                    onchange="sort()">
+                                <option value="asc" selected="">&#x25B2; {{ __('events.sort_up') }}</option>
+                                <option value="desc">&#x25BC; {{ __('events.sort_down') }}</option>
+                            </select>
+                        </div>
+                    </div>
+
                     @can('isOrganizer')
                         <button type="button"
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700focus:outline-none dark:focus:ring-blue-800"
@@ -94,49 +132,6 @@
                     @endcan
                 </div>
 
-                <div class="p-6 space-y-4">
-                    <div class="pb-4 bg-white">
-                        <label for="table-search" class="sr-only"></label>
-
-                        <div class="space-x-2 flex justify-start items-center w-full">
-                            <button onclick="toggleCheckboxList()"
-                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 512 512" stroke="currentColor">
-                                    <!-- Zastąp poniższe ścieżki odpowiednimi dla Twojego SVG -->
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
-                                {{ __('events.category') }}
-                            </button>
-                            <div id="checkboxList" class="hidden mt-2 bg-white border rounded p-2">
-                                <div class="grid grid-cols-1 gap-2">
-                                    @foreach($categories as $category)
-                                        <div class="flex items-center ml-2 mb-2">
-                                            <input type="checkbox" id="category_{{ $category->id }}" name="categories[]"
-                                                   value="{{ $category->id }}" onchange="filterEvents()">
-                                            <label for="category_{{ $category->id }}"
-                                                   class="ml-2 text-sm font-medium text-gray-900">{{ $category->name }}</label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <div class="flex justify-start items-center w-full">
-                                <select name="sort" id="sort"
-                                        class="mr-2 min-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                                        onchange="sort()">
-                                    <option value="date" selected="">{{ __('events.sort_date') }}</option>
-                                    <option value="title">{{ __('events.sort_title') }}</option>
-                                    <option value="city">{{ __('events.sort_city') }}</option>
-                                </select>
-                                <select name="order" id="order"
-                                        class="w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                                        onchange="sort()">
-                                    <option value="asc" selected="">&#x25B2; {{ __('events.sort_up') }}</option>
-                                    <option value="desc">&#x25BC; {{ __('events.sort_down') }}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <script>
                     function toggleCheckboxList() {

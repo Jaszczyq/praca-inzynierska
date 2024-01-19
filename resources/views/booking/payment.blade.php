@@ -4,7 +4,7 @@
     <div class="container">
         <div class="w-full max-w-xl mx-auto bg-white rounded p-5">
             <div class="mb-5">
-                <h2 class="text-center font-bold text-2xl mb-3">Metoda płatności</h2>
+                <h2 class="text-center font-bold text-2xl mb-3">{{ __('booking.payment_methods') }}</h2>
                 <div class="flex justify-between space-x-4 p-2 mx-auto">
                     <div class="w-1/5 payment-method">
                         <div class="border rounded p-2 text-center h-20 w-20 mx-auto">
@@ -74,7 +74,7 @@
             </div>
             <div class="mb-5 flex justify-center">
                 <button id="pay-button" class="disabled w-64 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mx-auto" disabled type="button">
-                    Zapłać
+                    {{ __('booking.pay') }}
                 </button>
             </div>
         </div>
@@ -82,7 +82,7 @@
 
     <style>
         .payment-method {
-            box-sizing: border-box;  /* Dodaj tę linię */
+            box-sizing: border-box;
             cursor: pointer;
         }
 

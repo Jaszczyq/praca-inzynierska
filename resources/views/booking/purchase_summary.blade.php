@@ -64,11 +64,11 @@
                             @php $seat_part = explode('_', $seat); @endphp
                             <li style="font-size: 1rem; margin-bottom: 10px; display: flex; justify-content: space-between;">
                                 <div style="display: flex;">
-                                    <span>Rząd: {{ $seat_part[0] }}</span>
-                                    <span style="margin-left: 10px;">Miejsce: {{ $seat_part[1] }}</span>
+                                    <span>{{__('summary.row')}} {{ $seat_part[0] }}</span>
+                                    <span style="margin-left: 10px;">{{__('summary.seat')}} {{ $seat_part[1] }}</span>
                                 </div>
                                 <div style="display: flex;">
-        <span style="margin-left: 10px;">Typ biletu:
+        <span style="margin-left: 10px;">{{__('summary.ticket_type')}}
             <select style="border-radius: 5px; background-color: #F4F4F7;" id="select_ticket_{{$id}}" onchange="calculateTotalPrice()">
                 @php
                     $types = TicketType::all();
@@ -81,7 +81,7 @@
                 @endphp
             </select>
         </span>
-                                    <span id="ticket_price_{{$id}}" style="margin-left: 10px; font-weight: bold; text-transform: uppercase;">0 zł</span>
+                                    <span id="ticket_price_{{$id}}" style="margin-left: 10px; font-weight: bold; text-transform: uppercase;">{{__('summary.pln')}}</span>
                                 </div>
                             </li>
                             @php $id++; @endphp
@@ -109,7 +109,7 @@
         </svg>
     </span>
                     @if ($event->date->isToday())
-                        Dzisiaj,
+                        {{ __('summary.today') }}
                     @else
                         {{ translateDays($event->date->format('l')) }},
                     @endif
@@ -121,13 +121,13 @@
                 <div id="ticket_summary" style="background-color: #F4F4F7; border-radius: 10px; padding: 20px;">
                 </div>
                 <div style="font-size: 15pt; margin-top: 20px; display: flex; justify-content: space-between;">
-                    <h2 style="font-weight: bold; text-transform: uppercase">Razem do zapłaty:</h2>
-                    <h2 style="font-weight: bold; text-transform: uppercase"><span id="totalPrice"></span> zł</h2>
+                    <h2 style="font-weight: bold; text-transform: uppercase">{{ __('summary.total_price') }}</h2>
+                    <h2 style="font-weight: bold; text-transform: uppercase"><span id="totalPrice"></span> {{__('summary.pln')}}</h2>
                 </div>
                 <a href="{{ route('payment', ['id' => $event->id]) }}"
                    id="buyTicketButton"
                    style="display: inline-block; width: 100%; background-color: #4CAF50; color: white; padding: 14px 20px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; text-align: center;">
-                    Kup Bilet
+                    {{ __('summary.buy_ticket') }}
                 </a>
             </div>
         </div>

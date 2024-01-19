@@ -25,10 +25,6 @@ class ReservationController extends Controller
     {
         $event = Event::find($event_id);
 
-        /*
-        $ticket_ids = explode(',', $ticket_ids);
-        $selectedTickets = TicketType::whereIn('id', $ticket_ids)->get();
-        */
         $seats = explode(',', $seats_ids);
 
         return view('booking.reservation_summary', ['event' => $event, 'selectedSeats' => $seats]);
