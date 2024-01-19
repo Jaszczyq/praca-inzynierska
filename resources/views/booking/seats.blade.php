@@ -42,14 +42,72 @@
     );
     }
 
-    $rows = 15;
-    $columns = 20;
-    $left_side = 5;
-    $right_side = 5;
+//    $rows = 15;
+//    $columns = 20;
+//    $left_side = 5;
+//    $right_side = 5;
 
+    $hallData = $event->hall->id;
 @endphp
 
 @section('content')
+    <!--style>
+        .row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .seat {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 3%;
+            height: 3%;
+            margin: 5px;
+            position: relative;
+            padding: 0px;
+            max-width: 40px;
+            max-height: 40px;
+        }
+
+        .seat .seat_container {
+            width: 40px;
+            height: 40px;
+            max-width: 40px;
+            max-height: 40px;
+            display: grid;
+            place-items: center;
+        }
+
+        .seat .seat_container > * {
+            grid-column-start: 1;
+            grid-row-start: 1;
+        }
+
+        .seat .seat_container span {
+            display: inline;
+            color: white !important;
+            font-size: 16pt;
+            font-weight: bold;
+            text-shadow: 0px 0px 3px black;
+            z-index: 2;
+        }
+
+        .seat.available img {
+            filter: invert(33%) sepia(84%) saturate(5858%) hue-rotate(199deg) brightness(90%) contrast(100%);
+        }
+
+        .seat.selected img {
+            filter: invert(54%) sepia(37%) saturate(7144%) hue-rotate(340deg) brightness(101%) contrast(101%);
+        }
+
+        .seat.disabled img {
+            filter: invert(73%) sepia(7%) saturate(3%) hue-rotate(322deg) brightness(96%) contrast(81%);
+        }
+    </style-->
     <style>
         .row {
             display: flex;
@@ -57,6 +115,9 @@
             justify-content: center;
             align-items: center;
             width: 100%;
+            height: 40px;
+            position: relative;
+            border-bottom: solid 1px #e1e1e1;
         }
 
         .seat {
@@ -152,29 +213,8 @@
     <div class="container">
         <div class="card bg-white" style="border: none;">
             <div class="card-body" style="border: 1px solid #e2e8f0; border-radius: 5px">
-                <div class="seats-container">
-                    @for($row = 1; $row <= $rows; $row++)
-                        <div class="row">
-                            @for($column = $columns; $column > 0; $column--)
-                                @if($column == $left_side)
-                                    <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
-                                            style="margin-right: 20px;">
-                                        @elseif($column == $columns - $right_side + 1)
-                                            <button class="seat available" id="seat_{{ $row }}_{{ $column }}"
-                                                    style="margin-left: 20px;">
-                                                @else
-                                                    <button class="seat available" id="seat_{{ $row }}_{{ $column }}">
-                                                        @endif
-                                                        <div class="seat_container">
-                                            <span id="seat_nr_{{ $row }}_{{ $column }}"
-                                                  style="display: none; color: white !important;">{{$column}}</span>
-                                                            <img src="{{url('/images/events/couch-solid.png')}}"
-                                                                 alt="Seat">
-                                                        </div>
-                                                    </button>
-                                    @endfor
-                        </div>
-                    @endfor
+                <div class="seats-container" id="cinemaHall">
+
                 </div>
             </div>
             <div class="mt-4">
@@ -184,6 +224,96 @@
         </div>
 
         <script>
+            function getHall(hallId) {
+                const hallList = document.getElementById('hallList');
+
+                const formData = new FormData();
+                formData.append('hallId', hallId);
+
+                var url = "{{ route('booking.get_hall', ':id') }}";
+
+                url = url.replace(":id", hallId);
+
+                return fetch(url, {
+                    method: 'GET'
+                }).then(response => {
+                    return response.json();
+                }).catch(error => {
+                    console.log(error);
+                    return null;
+                });
+            }
+
+            function loadHall(hallId) {
+                getHall(hallId).then(hall => {
+                    var hall_data = hall.hall;
+
+                    var name = hall_data.name;
+                    var json_template = JSON.parse(hall_data.json_template);
+
+                    clearHall();
+
+                    var rows = json_template.length;
+
+                    for (let i = 0; i < rows; i++) {
+                        var row = insertRow();
+
+                        var seats = json_template[i].seats;
+
+                        for (let j = 0; j < seats.length; j++) {
+                            var seat = createButton(seats[j].left);
+
+                            row.appendChild(seat);
+                        }
+                    }
+                });
+            }
+
+            function insertRow() {
+                const rowDiv = document.createElement('div');
+                rowDiv.classList.add('row');
+
+                document.getElementById('cinemaHall').appendChild(rowDiv);
+
+                return rowDiv;
+            }
+
+            function clearHall() {
+                const rows = document.querySelectorAll('.row');
+
+                for (const row of rows) {
+                    row.remove();
+                }
+            }
+
+            function createButton(left) {
+                const seatButton = document.createElement('button');
+                seatButton.classList.add('seat', 'available');
+                seatButton.style.position = 'absolute';
+                seatButton.style.left = left + 'px';
+
+                seatButton.addEventListener('click', function(event) {
+                    if (seatButton.classList.contains('selected')) {
+                        seatButton.classList.remove('selected');
+                    }
+                    else {
+                        seatButton.classList.add('selected');
+                    }
+                });
+
+                const seatContainer = document.createElement('div');
+                seatContainer.classList.add('seat_container');
+
+                const seatImage = document.createElement('img');
+                seatImage.src = '/images/events/couch-solid.png';
+                seatImage.alt = 'Seat';
+
+                seatContainer.appendChild(seatImage);
+                seatButton.appendChild(seatContainer);
+
+                return seatButton;
+            }
+
             function isAnySeatSelected() {
                 return document.querySelectorAll('.seat.selected').length > 0;
             }
@@ -234,14 +364,15 @@
                 window.location.href = "/purchase-summary/{{$event->id}}/" + getSeatsAsString();
             });
 
-            document.getElementById("reserve-btn-btn").addEventListener("click", function () {
+            document.getElementById("reserve-btn").addEventListener("click", function () {
                 window.location.href = "/reservation-summary/{{$event->id}}/" + getSeatsAsString();
             });
 
-            document.getElementById('eventTitle').innerText = event.title;
-            document.getElementById('eventDateTime').innerText = event.date + ' at ' + event.time;
-            document.getElementById('eventLocation').innerText = event.city + ', ' + event.place;
+            // document.getElementById('eventTitle').innerText = event.title;
+            // document.getElementById('eventDateTime').innerText = event.date + ' at ' + event.time;
+            // document.getElementById('eventLocation').innerText = event.city + ', ' + event.place;
 
+            loadHall({{ $hallData }});
         </script>
 
         <script src="node_modules/flowbite/dist/flowbite.min.js"></script>

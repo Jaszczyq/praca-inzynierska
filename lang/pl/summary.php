@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'row' => 'Rząd:',
     'seat' => 'Miejsce:',
     'ticket_type' => 'Typ biletu:',
@@ -12,6 +11,4 @@ return [
     'pay' => 'Zapłać',
 
     'reserve_ticket' => 'Rezerwuj bilet',
-
-
 ];

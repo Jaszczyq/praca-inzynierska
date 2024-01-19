@@ -43,11 +43,17 @@
 
             <div class="navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav me-auto flex">
                     <li class="nav-item">
-                        <a class="{{ request()->routeIs('events.index') ? 'active-tab' : 'nav-link' }} block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 rounded md:p-0"
+                        <a class="{{ request()->routeIs('events.index') ? 'active-tab' : 'nav-link' }} py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 rounded md:p-0"
                            href="{{ route('events.index') }}">{{ __('events.events') }}</a>
                     </li>
+                    @can('isOrganizer')
+                    <li class="nav-item">
+                        <a class="{{ request()->routeIs('seats_creator') ? 'active-tab' : 'nav-link' }} py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 rounded md:p-0"
+                           href="{{ route('seats_creator') }}">{{ __('events.seats_creator') }}</a>
+                    </li>
+                    @endcan
                 </ul>
 
 
@@ -112,6 +118,7 @@
         position: relative;
         font-weight: bold; /* Pogrubienie tekstu */
         color: #1D4ED8; /* Tailwind kolor text-blue-700 */
+        top: 0; /* Dodane, aby upewnić się, że pozycja w pionie jest niezmieniona */
     }
 
     .active-tab::after {
@@ -122,6 +129,7 @@
         bottom: -0.5rem; /* większy odstęp od tekstu */
         height: 2px; /* wysokość kreski */
         background: #1D4ED8; /* Tailwind kolor bg-blue-700 */
+        transform: translateY(100%); /* Przesunięcie kreski w dół */
     }
 </style>
 </div>

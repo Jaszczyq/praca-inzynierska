@@ -12,7 +12,7 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'place', 'city', 'date', 'time', 'image', 'added_by', 'category_id'];
+    protected $fillable = ['title', 'description', 'place', 'city', 'date', 'time', 'image', 'added_by', 'category_id', 'hall_id'];
 
     protected $attributes = [
         'place' => 'default',
@@ -37,6 +37,10 @@ class Event extends Model
     {
         return $this->belongsToMany(TicketType::class, 'event_ticket_types', 'event_id', 'ticket_type_id')
             ->withPivot('price');
+    }
+
+    public function hall() {
+        return $this->belongsTo(Hall::class, 'hall_id');
     }
 
 

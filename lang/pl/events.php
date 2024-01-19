@@ -1,8 +1,8 @@
 <?php
 
 return [
-
     'events' => 'Wydarzenia',
+    'seats_creator' => 'Kreator sali',
     'my_events' => 'Moje wydarzenia',
     'create' => 'Dodaj wydarzenie',
     'edit' => 'Edytuj wydarzenie',

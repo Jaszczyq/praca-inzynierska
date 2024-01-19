@@ -48,7 +48,6 @@
 }
 
 
-
 @endphp
 
 @section('content')
@@ -72,8 +71,8 @@
             <select style="border-radius: 5px; background-color: #F4F4F7;" id="select_ticket_{{$id}}" onchange="calculateTotalPrice()">
                 @php
                     $types = TicketType::all();
-                    $event_ticket_prices = DB::table('event_ticket_types')->where('event_id', $event->id)->get(['id', 'price']);
-                    $event_ticket_prices = array_combine($event_ticket_prices->pluck('id')->toArray(), $event_ticket_prices->pluck('price')->toArray());
+                    $event_ticket_prices = DB::table('event_ticket_types')->where('event_id', $event->id)->get();
+                    $event_ticket_prices = array_combine($event_ticket_prices->pluck('ticket_type_id')->toArray(), $event_ticket_prices->pluck('price')->toArray());
 
                     foreach ($types as $type) {
                         echo '<option style="border: radius: 5px;" value="' . $type->id . '" data-price="' . ($event_ticket_prices[$type->id] ?? 0) . '">' . $type->name . '</option>';
@@ -124,7 +123,7 @@
                     <h2 style="font-weight: bold; text-transform: uppercase">{{ __('summary.total_price') }}</h2>
                     <h2 style="font-weight: bold; text-transform: uppercase"><span id="totalPrice"></span> {{__('summary.pln')}}</h2>
                 </div>
-                <a href="{{ route('payment', ['id' => $event->id]) }}"
+                <a onclick="saveToLocalStorage()" href="{{ route('payment', ['id' => $event->id]) }}"
                    id="buyTicketButton"
                    style="display: inline-block; width: 100%; background-color: #4CAF50; color: white; padding: 14px 20px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; text-align: center;">
                     {{ __('summary.buy_ticket') }}

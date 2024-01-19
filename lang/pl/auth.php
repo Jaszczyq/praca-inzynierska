@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'login' => 'Zaloguj',
     'register' => 'Rejestracja',
     'logout' => 'Wyloguj',
@@ -16,6 +15,4 @@ return [
     'client' => 'Klient',
     'password_reset' => 'Resetuj hasło',
     'send_password_reset_link' => 'Wyslij link do resetowania hasła',
-
-
 ];
