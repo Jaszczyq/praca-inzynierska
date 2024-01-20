@@ -80,4 +80,9 @@ Route::get('/payment/{transaction_id}/fail', [PurchaseController::class, 'failPa
 Route::get('/payment/{transaction_id}/pending', [PurchaseController::class, 'pendingPayment'])->name('payment.pending');
 Route::get('/payment/{transaction_id}/no_payment', [PurchaseController::class, 'noPayment'])->name('payment.no_payment');
 
+Route::get('/tickets', [EventController::class, 'tickets'])->name('tickets');
+Route::get('/tickets/refund/{ticket_id}', [EventController::class, 'refundTickets'])->name('tickets.refund');
+Route::post('/tickets/refund', [EventController::class, 'sendDataForRefund'])->name('tickets.refundData');
+Route::get('/tickets/sort/{by}/{order}', [EventController::class, 'sortTickets'])->name('tickets.sort');
+
 Route::get('/debug_mail', [ForgotPasswordController::class, 'debugMail'])->name('mail.debug');

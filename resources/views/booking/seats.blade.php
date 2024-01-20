@@ -48,6 +48,8 @@
 //    $right_side = 5;
 
     $hallData = $event->hall->id;
+
+    $reservations = $event->reservations;
 @endphp
 
 @section('content')
@@ -112,7 +114,7 @@
         .row {
             display: flex;
             flex-direction: row;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             width: 100%;
             height: 40px;
@@ -148,7 +150,7 @@
         }
 
         .seat .seat_container span {
-            display: inline;
+            display: none;
             color: white !important;
             font-size: 16pt;
             font-weight: bold;
@@ -164,8 +166,23 @@
             filter: invert(54%) sepia(37%) saturate(7144%) hue-rotate(340deg) brightness(101%) contrast(101%);
         }
 
+        .seat.selected .seat_container span {
+            display: inline;
+        }
+
         .seat.disabled img {
             filter: invert(73%) sepia(7%) saturate(3%) hue-rotate(322deg) brightness(96%) contrast(81%);
+        }
+
+        .row_number, .row_number_end {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            color: #8b8b8b;
+            font-weight: bold;
         }
     </style>
     <link rel="stylesheet" type="text/css" href="resources/css/seats.css">
@@ -224,6 +241,27 @@
         </div>
 
         <script>
+            function disableSeats() {
+                var reserved_seats = JSON.parse('{!! json_encode($reservations) !!}');
+
+                for (var i = 0; i < reserved_seats.length; i++) {
+                    var seat = reserved_seats[i].seat;
+                    var splitted = seat.split('_');
+                    var row_number = splitted[0];
+                    var seat_number = splitted[1];
+
+                    var span = document.getElementById("seat_nr_" + row_number+"_"+seat_number);
+                    var button = span.parentNode.parentNode;
+
+                    button.disabled = true;
+                    button.classList.add('disabled');
+
+                    button.onclick = function() {
+                        return false;
+                    }
+                }
+            }
+
             function getHall(hallId) {
                 const hallList = document.getElementById('hallList');
 
@@ -260,18 +298,42 @@
 
                         var seats = json_template[i].seats;
 
+                        seats = seats.sort(function (a, b) {
+                            return b.left - a.left;
+                        });
+
                         for (let j = 0; j < seats.length; j++) {
                             var seat = createButton(seats[j].left);
+                            var seat_container = seat.querySelector(".seat_container");
+                            seat_container.innerHTML = '<span id="seat_nr_'+(i+1)+'_'+(j+1)+'" style="color: white !important;">'+(j+1)+'</span>' + seat_container.innerHTML;
 
                             row.appendChild(seat);
                         }
                     }
+
+                    disableSeats();
                 });
             }
 
             function insertRow() {
                 const rowDiv = document.createElement('div');
                 rowDiv.classList.add('row');
+
+                // get rows amount
+                const rows = document.querySelectorAll('.row');
+                const rowsAmount = rows.length;
+
+                const rowNumber = rowsAmount + 1;
+
+                const rowNumberDiv = document.createElement('div');
+                rowNumberDiv.classList.add('row_number');
+                rowNumberDiv.innerHTML = rowNumber;
+                rowDiv.appendChild(rowNumberDiv);
+
+                const rowNumberEndDiv = document.createElement('div');
+                rowNumberEndDiv.classList.add('row_number_end');
+                rowNumberEndDiv.innerHTML = rowNumber;
+                rowDiv.appendChild(rowNumberEndDiv);
 
                 document.getElementById('cinemaHall').appendChild(rowDiv);
 
@@ -290,7 +352,7 @@
                 const seatButton = document.createElement('button');
                 seatButton.classList.add('seat', 'available');
                 seatButton.style.position = 'absolute';
-                seatButton.style.left = left + 'px';
+                seatButton.style.left = (left/1080*100) + '%';
 
                 seatButton.addEventListener('click', function(event) {
                     if (seatButton.classList.contains('selected')) {
@@ -299,6 +361,7 @@
                     else {
                         seatButton.classList.add('selected');
                     }
+                    switchButtons();
                 });
 
                 const seatContainer = document.createElement('div');
@@ -329,7 +392,7 @@
                 }
             }
 
-            document.querySelectorAll('.seat').forEach(seat => {
+            /*document.querySelectorAll('.seat').forEach(seat => {
                 seat.addEventListener('click', (e) => {
                     var target = e.target;
                     var clickedButton;
@@ -349,12 +412,12 @@
                     }
                     switchButtons();
                 });
-            });
+            });*/
 
             function getSeatsAsString() {
                 var seats = '';
-                document.querySelectorAll('.seat.selected').forEach(seat => {
-                    seats += seat.id.replace('seat_', '') + ',';
+                document.querySelectorAll('.seat.selected span').forEach(seat => {
+                    seats += seat.id.replace('seat_nr_', '') + ',';
                 });
                 seats = seats.slice(0, -1);
                 return seats;

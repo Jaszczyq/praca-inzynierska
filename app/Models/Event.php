@@ -43,7 +43,10 @@ class Event extends Model
         return $this->belongsTo(Hall::class, 'hall_id');
     }
 
-
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'event_id');
+    }
     public function getDateAttribute($value)
     {
         return Carbon::parse($value);

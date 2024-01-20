@@ -135,10 +135,11 @@
     <script>
         function saveToLocalStorage() {
             let ticketsData = [];
+            var seats = "{{ implode(',', $selectedSeats) }}".split(",");
 
             document.querySelectorAll('select[id^="select_ticket_"]').forEach((select, index) => {
                 let price = document.getElementById(`ticket_price_${index}`).innerText;
-                ticketsData.push({ type: select.value, price: price });
+                ticketsData.push({ type: select.value, price: price, seat: seats[index] });
             });
 
             localStorage.setItem('selectedTickets', JSON.stringify(ticketsData));

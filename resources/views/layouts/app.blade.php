@@ -44,12 +44,16 @@
             <div class="navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto flex">
-                    <li class="nav-item">
+                    <li class="nav-item mx-2">
                         <a class="{{ request()->routeIs('events.index') ? 'active-tab' : 'nav-link' }} py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 rounded md:p-0"
                            href="{{ route('events.index') }}">{{ __('events.events') }}</a>
                     </li>
+                    <li class="nav-item mx-2">
+                        <a class="{{ request()->routeIs('tickets') ? 'active-tab' : 'nav-link' }} py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 rounded md:p-0"
+                           href="{{ route('tickets') }}">{{ __('events.my_tickets') }}</a>
+                    </li>
                     @can('isOrganizer')
-                    <li class="nav-item">
+                    <li class="nav-item mx-2">
                         <a class="{{ request()->routeIs('seats_creator') ? 'active-tab' : 'nav-link' }} py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 rounded md:p-0"
                            href="{{ route('seats_creator') }}">{{ __('events.seats_creator') }}</a>
                     </li>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Hall;
+use App\Models\Payment;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -311,5 +313,55 @@ class EventController extends Controller
         }
 
         return view('events.my_events', compact('currentEvents', 'archivedEvents', 'categories', 'selectedCategory'));
+    }
+
+    public function tickets()
+    {
+        $tickets = Ticket::where('user_id', Auth::user()->id)->get();
+
+        $categories = EventCategory::all();
+
+        return view('events.tickets', compact('tickets', 'categories'));
+    }
+
+    public function sortTickets($by, $order)
+    {
+        $tickets = Ticket::with(['event' => function ($query) use ($by, $order) {
+            $query->orderBy($by, $order);
+        }])
+            ->where('user_id', Auth::user()->id)
+            ->get();
+
+        $categories = EventCategory::all();
+
+        return view('events.tickets_search_results', compact('tickets', 'categories'));
+    }
+
+    public function refundTickets($ticket_id)
+    {
+        $ticket = Ticket::find($ticket_id);
+        return view('events.refund_ticket', compact('ticket'));
+    }
+
+    public function sendDataForRefund(Request $request)
+    {
+        $ticket = Ticket::find($request->get('ticket_id'));
+
+        $price = $request->get('ticketPrice');
+        $email = $request->get('email');
+
+        // check if difference betweem price and ticket price is equal to 0
+        $price = floatval($price);
+        $ticketPrice = floatval($ticket->price);
+
+        if ($price == $ticketPrice && $email == $ticket->user->email) {
+            DB::table('refunds')->insert([
+                'ticket_id' => $ticket->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+        }
+
+        return view('events.refund_success');
     }
 }

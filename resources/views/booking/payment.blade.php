@@ -140,13 +140,17 @@
             if (selectedPaymentMethod === null) {
                 console.log('No payment method selected');
             }
+            else if (localStorage.getItem('selectedTickets') === null) {
+                console.log('No seats selected previously');
+            }
             else {
                 var paymentMethod = selectedPaymentMethod.querySelector('img').alt;
 
                 var data = {
                     paymentMethod: paymentMethod,
                     eventId: {{ $event->id }},
-                    price: price
+                    price: price,
+                    selectedSeats: localStorage.getItem('selectedTickets'),
                 };
 
                 fetch(url, {
