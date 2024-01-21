@@ -39,5 +39,7 @@ return [
     'sort_city' => 'Sortuj po miejsowości',
     'sort_up' => 'rosnąco',
     'sort_down' => 'malejąco',
+    'my_tickets' => 'Moje bilety',
+    'no_tickets' => 'Brak biletów',
 
 ];

@@ -53,17 +53,24 @@ class EventController extends Controller
 
     public function search(Request $request)
     {
-
         $title = $request->query('title') ?? '';
         $city = $request->query('city') ?? '';
 
         $myEvents = $request->query('mySearch');
+        $currentDate = now()->toDateString();
 
         if($myEvents) {
-            $events = Event::where('added_by', Auth::user()->id)->where('title', 'like', '%' . $title . '%')->where('city', 'like', '%' . $city . '%')->get();
+            $events = Event::where('added_by', Auth::user()->id)
+                ->where('title', 'like', '%' . $title . '%')
+                ->where('city', 'like', '%' . $city . '%')
+                ->whereDate('date', '>=', $currentDate)
+                ->get();
             return view('events.my_search_results', ['events' => $events]);
         } else {
-            $events = Event::where('title', 'like', '%' . $title . '%')->where('city', 'like', '%' . $city . '%')->get();
+            $events = Event::where('title', 'like', '%' . $title . '%')
+                ->where('city', 'like', '%' . $city . '%')
+                ->whereDate('date', '>=', $currentDate)
+                ->get();
             return view('events.search_results', ['events' => $events]);
         }
     }
