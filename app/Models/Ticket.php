@@ -33,4 +33,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function refund()
+    {
+        return $this->hasOne(Refund::class);
+    }
 }

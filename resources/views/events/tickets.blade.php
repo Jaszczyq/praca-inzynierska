@@ -142,7 +142,7 @@
                                 <div
                                     class="row-cell cell-wyd-lista-5 my-auto p-4 w-44 table-cell align-middle line-height-normal text-center">
                                     <div class="flex flex-col justify-center h-full">
-                                        <div>Bilet {{ $ticket->ticketType->name }}, <b>{{ $event->price }} zł</b></div>
+                                        <div>Bilet {{ $ticket->ticketType->name }}, <b>{{ $ticket->price }} zł</b></div>
                                         <!-- check if time to event is more than 30 minutes -->
                                         @php
                                             $eventStart = \Carbon\Carbon::parse(explode(' ', $event->date)[0] . ' ' . $event->time);
@@ -150,7 +150,7 @@
                                         @endphp
 
                                         @if($now->lessThan($eventStart) && $now->diffInMinutes($eventStart) > 30)
-                                        <a href="{{ route('tickets.refund', ['id' => $ticket->id]) }}"
+                                        <a href="{{ route('tickets.refund', ['ticket_id' => $ticket->id]) }}"
                                            class="btn btn-primary">{{ __('events.refund') }}</a>
                                         @endif
                                     </div>

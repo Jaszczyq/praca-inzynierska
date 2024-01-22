@@ -362,6 +362,10 @@ class EventController extends Controller
         $ticketPrice = floatval($ticket->price);
 
         if ($price == $ticketPrice && $email == $ticket->user->email) {
+            // check if ticket is not already in refunds table
+            if (DB::table('refunds')->where('ticket_id', $ticket->id)->exists()) {
+                return response()->json(['success' => 'Success']);
+            }
             DB::table('refunds')->insert([
                 'ticket_id' => $ticket->id,
                 'created_at' => Carbon::now(),
@@ -369,6 +373,11 @@ class EventController extends Controller
             ]);
         }
 
+        return response()->json(['success' => 'Success']);
+    }
+
+    public function showInfo()
+    {
         return view('events.refund_success');
     }
 }

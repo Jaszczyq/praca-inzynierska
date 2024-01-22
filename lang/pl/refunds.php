@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'events' => 'Wydarzenia',
-    'seats_creator' => 'Kreator sali',
-    'my_events' => 'Moje wydarzenia',
+    'list' => 'Zwroty',
+    'no_refunds' => 'Brak zwrotów',
+    'refunds_manage' => 'Zarzadzaj zwrotem',
     'create' => 'Dodaj wydarzenie',
     'edit' => 'Edytuj wydarzenie',
     'restore' => 'Przywróć wydarzenie',

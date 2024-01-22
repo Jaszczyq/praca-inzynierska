@@ -5,6 +5,7 @@ use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HallsController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RefundController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SeatController;
 use App\Models\Event;
@@ -80,9 +81,13 @@ Route::get('/payment/{transaction_id}/fail', [PurchaseController::class, 'failPa
 Route::get('/payment/{transaction_id}/pending', [PurchaseController::class, 'pendingPayment'])->name('payment.pending');
 Route::get('/payment/{transaction_id}/no_payment', [PurchaseController::class, 'noPayment'])->name('payment.no_payment');
 
+Route::get('/refunds/list', [RefundController::class, 'refundList'])->name('refunds.list');
+Route::post('/refunds/refund', [RefundController::class, 'refundTickets'])->name('refunds.refund');
+
 Route::get('/tickets', [EventController::class, 'tickets'])->name('tickets');
 Route::get('/tickets/refund/{ticket_id}', [EventController::class, 'refundTickets'])->name('tickets.refund');
 Route::post('/tickets/refund', [EventController::class, 'sendDataForRefund'])->name('tickets.refundData');
+Route::get('/tickets/refund_info', [EventController::class, 'showInfo'])->name('tickets.showRefundInfo');
 Route::get('/tickets/sort/{by}/{order}', [EventController::class, 'sortTickets'])->name('tickets.sort');
 
 Route::get('/debug_mail', [ForgotPasswordController::class, 'debugMail'])->name('mail.debug');

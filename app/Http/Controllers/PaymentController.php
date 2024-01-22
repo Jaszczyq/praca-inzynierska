@@ -23,7 +23,7 @@ class PaymentController extends Controller
 
     public function show($event_id, $seats_ids)
     {
-        $event = \App\Event::find($event_id);
+        $event = Event::find($event_id);
         $seats = explode(',', $seats_ids);
 
         return view('booking.payment', ['event' => $event]);
