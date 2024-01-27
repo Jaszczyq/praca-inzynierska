@@ -13,6 +13,10 @@ use Ramsey\Uuid\Uuid;
 class RefundController extends Controller
 {
     public function refundList() {
+        if (!Auth::user()->isOrganizer()) {
+            abort(403, 'Brak uprawnień');
+        }
+
         $organiserId = Auth::user()->id;
         $organiserEvents = Event::where('added_by', $organiserId)->get();
 

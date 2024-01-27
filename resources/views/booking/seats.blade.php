@@ -53,63 +53,6 @@
 @endphp
 
 @section('content')
-    <!--style>
-        .row {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
-        .seat {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 3%;
-            height: 3%;
-            margin: 5px;
-            position: relative;
-            padding: 0px;
-            max-width: 40px;
-            max-height: 40px;
-        }
-
-        .seat .seat_container {
-            width: 40px;
-            height: 40px;
-            max-width: 40px;
-            max-height: 40px;
-            display: grid;
-            place-items: center;
-        }
-
-        .seat .seat_container > * {
-            grid-column-start: 1;
-            grid-row-start: 1;
-        }
-
-        .seat .seat_container span {
-            display: inline;
-            color: white !important;
-            font-size: 16pt;
-            font-weight: bold;
-            text-shadow: 0px 0px 3px black;
-            z-index: 2;
-        }
-
-        .seat.available img {
-            filter: invert(33%) sepia(84%) saturate(5858%) hue-rotate(199deg) brightness(90%) contrast(100%);
-        }
-
-        .seat.selected img {
-            filter: invert(54%) sepia(37%) saturate(7144%) hue-rotate(340deg) brightness(101%) contrast(101%);
-        }
-
-        .seat.disabled img {
-            filter: invert(73%) sepia(7%) saturate(3%) hue-rotate(322deg) brightness(96%) contrast(81%);
-        }
-    </style-->
     <style>
         .row {
             display: flex;
@@ -184,9 +127,23 @@
             color: #8b8b8b;
             font-weight: bold;
         }
+
+        .card-body {
+            position: relative; /* Create a positioning context */
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            padding-bottom: 60px; /* Adjust this value based on the total height of the buttons and desired margin */
+        }
+
+        .button-container {
+            position: absolute; /* Position the buttons absolutely within the card-body */
+            bottom: 10px; /* Margin from the bottom edge */
+            right: 10px; /* Margin from the right edge */
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="resources/css/seats.css">
 
+    <div class="event-container">
     <div class="event-details bg-white"
          style="align-self: flex-start; border: 1px solid #e2e8f0; border-radius: 5px; padding: 20px 100px; width: 100%; box-sizing: border-box;">
         <div style="display: flex; justify-content: space-between;">
@@ -226,17 +183,18 @@
             </p>
         </div>
     </div>
+    </div>
 
     <div class="container">
         <div class="card bg-white" style="border: none;">
-            <div class="card-body" style="border: 1px solid #e2e8f0; border-radius: 5px">
+            <div class="card-body">
                 <div class="seats-container" id="cinemaHall">
-
+                    <!-- Seat elements will go here -->
                 </div>
-            </div>
-            <div class="mt-4">
-                <button class="btn btn-primary" id="reserve-btn" disabled>{{__('booking.reserve')}}</button>
-                <button class="btn btn-success" id="buy-btn" disabled>{{__('booking.buy_tickets')}}</button>
+                <div class="button-container">
+                    <button class="btn btn-primary" id="reserve-btn" disabled>{{__('booking.reserve')}}</button>
+                    <button class="btn btn-success" id="buy-btn" disabled>{{__('booking.buy_tickets')}}</button>
+                </div>
             </div>
         </div>
 

@@ -62,6 +62,12 @@
                                         {{ __('auth.forgotpassword') }}
                                     </a>
                                 @endif
+
+                                @if (Route::has('register'))
+                                    <a class="btn btn-link" href="{{ route('register') }}">
+                                        {{ __('auth.no_account') }} {{ __('auth.create_an_account') }}
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </form>

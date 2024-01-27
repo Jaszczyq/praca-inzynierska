@@ -7,8 +7,7 @@
             <div class="md:flex">
                 <div class="w-full p-5">
                     <div class="text-center">
-                        <h1 class="text-gray-600 font-bold text-2xl mb-1">Zwrot Biletu</h1>
-                        <p>Jeśli podane dane były poprawne, to zgłoszenie zwrotu biletu zostało wysłane.</p>
+                        <p>Zgłoszenie zwrotu biletu zostało wysłane do organizatora wydarzenia i czeka na jego rozpatrzenie.</p>
                     </div>
                 </div>
             </div>

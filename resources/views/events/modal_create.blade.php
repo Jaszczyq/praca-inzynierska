@@ -53,18 +53,12 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="date"
-                               class="block text-sm font-medium text-gray-700">{{ __('events.date') }}</label>
-                        <input type="date" name="date" id="date"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                               required>
+                        <label for="date" class="block text-sm font-medium text-gray-700">{{ __('events.date') }}</label>
+                        <input type="date" name="date" id="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                     </div>
                     <div class="form-group">
-                        <label for="time"
-                               class="block text-sm font-medium text-gray-700">{{ __('events.time') }}</label>
-                        <input type="time" name="time" id="time"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                               required>
+                        <label for="time" class="block text-sm font-medium text-gray-700">{{ __('events.time') }}</label>
+                        <input type="time" name="time" id="time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                     </div>
 
                     <div id="ticketTypesWithPrices">
@@ -104,6 +98,27 @@
     </div>
 </div>
 <script>
+
+    document.getElementById('date').setAttribute('min', new Date().toISOString().split('T')[0]);
+
+    // Funkcja aktualizująca atrybut 'min' dla pola czasu na bieżącą godzinę, jeśli data jest dzisiejsza
+    function updateTimeMinValue() {
+        const dateInput = document.getElementById('date');
+        const timeInput = document.getElementById('time');
+        const currentDate = new Date().toISOString().split('T')[0];
+
+        if (dateInput.value === currentDate) {
+            const currentTime = new Date().toTimeString().split(' ')[0];
+            timeInput.setAttribute('min', currentTime);
+        } else {
+            // Usuwanie ograniczenia czasu, jeśli wybrana jest inna data niż dzisiejsza
+            timeInput.removeAttribute('min');
+        }
+    }
+
+    // Nasłuchiwanie zmian w polu daty
+    document.getElementById('date').addEventListener('change', updateTimeMinValue);
+
     document.addEventListener('DOMContentLoaded', (event) => {
         // Przykładowe ceny dla różnych typów biletów
         let ticketPrices = {

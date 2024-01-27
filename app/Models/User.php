@@ -36,6 +36,11 @@ class User extends Authenticatable
         return $value;
     }
 
+    public function isOrganizer()
+    {
+        return $this->role === 'organizer';
+    }
+
     public function setRoleAttribute($value)
     {
         $this->attributes['role'] = $value;

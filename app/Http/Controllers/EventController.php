@@ -299,6 +299,10 @@ class EventController extends Controller
 
     public function myEvents(Request $request)
     {
+        if (!Auth::check() || !Auth::user()->isOrganizer()) {
+            abort(403, 'Brak uprawnień');
+        }
+
         $selectedCategory = $request->input('category');
         $categories = EventCategory::all();
         $userId = Auth::user()->id;
@@ -324,8 +328,11 @@ class EventController extends Controller
 
     public function tickets()
     {
-        $tickets = Ticket::where('user_id', Auth::user()->id)->get();
+        if (!Auth::check()) {
+            abort(403, 'Brak uprawnień');
+        }
 
+        $tickets = Ticket::where('user_id', Auth::user()->id)->get();
         $categories = EventCategory::all();
 
         return view('events.tickets', compact('tickets', 'categories'));

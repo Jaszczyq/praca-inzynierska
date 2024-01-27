@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TicketMail;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Payment;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Ramsey\Uuid\Uuid;
 
 class PurchaseController extends Controller
@@ -78,19 +80,25 @@ class PurchaseController extends Controller
 
         $selectedSeats = json_decode($payment->details);
 
+        $tickets = [];
+
         foreach ($selectedSeats as $data) {
             $ticket = new Ticket();
 
-            $ticket->event_id = DB::table('reservations')->where('seat', $data->seat)->first()->event_id;
+            $ticket->event_id = $data->event_id;
             $ticket->ticket_type_id = $data->type;
             $ticket->seat = $data->seat;
             $ticket->user_id = Auth::user()->id;
             $ticket->price = explode(' ', $data->price)[0];
 
             $ticket->save();
+
+            $tickets[] = $ticket;
         }
 
         // tu można zrobić wysyłkę maila
+        Mail::to(Auth::user()->email)->send(new TicketMail($tickets));
+
         return view('booking.payment_status', ['payment' => $payment]);
     }
 

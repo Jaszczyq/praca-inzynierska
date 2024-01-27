@@ -15,4 +15,6 @@ return [
     'client' => 'Klient',
     'password_reset' => 'Resetuj hasło',
     'send_password_reset_link' => 'Wyslij link do resetowania hasła',
+    'no_account' => 'Nie masz konta?',
+    'create_an_account' => 'Utwórz je',
 ];

@@ -8,7 +8,6 @@
             <div class="w-full p-5">
                 <div class="text-center">
                     <h1 class="text-gray-600 font-bold text-2xl mb-1">Zwrot Biletu</h1>
-                    <p>Wpisz wymagane informacje, aby zwrócić bilet</p>
                 </div>
                 <form id="refundForm" class="mt-4" action="#">
                     @csrf
@@ -22,7 +21,7 @@
                         <input type="email" placeholder="Wpisz swój adres email" name="email" id="email" value="{{ Auth::user()->email }}" disabled class="w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:border-blue-500" />
                     </div>
                     <div class="flex justify-end mt-4">
-                        <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Wyślij dane</button>
+                        <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Wyślij</button>
                     </div>
                 </form>
             </div>
@@ -39,9 +38,6 @@
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:items-start">
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                            Zwrot biletu
-                        </h3>
                         <div class="mt-2">
                             <p class="text-sm text-gray-500">Czy aby na pewno chcesz zwrócić ten bilet?</p>
                         </div>

@@ -139,7 +139,7 @@
 
             document.querySelectorAll('select[id^="select_ticket_"]').forEach((select, index) => {
                 let price = document.getElementById(`ticket_price_${index}`).innerText;
-                ticketsData.push({ type: select.value, price: price, seat: seats[index] });
+                ticketsData.push({ type: select.value, price: price, seat: seats[index], event_id: {{ $event->id }} });
             });
 
             localStorage.setItem('selectedTickets', JSON.stringify(ticketsData));
