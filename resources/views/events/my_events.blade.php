@@ -368,7 +368,7 @@
         }
     </script>
 
-    @component('events.modal_create', ['categories' => $categories])
+    @component('events.modal_create', ['categories' => $categories, 'halls' => $halls])
     @endcomponent
     <script>
         var modal = document.getElementById("modal_create");
@@ -404,7 +404,7 @@
             });
         });
     </script>
-    @component('events.modal_edit', ['categories' => $categories])
+    @component('events.modal_edit', ['categories' => $categories, 'halls' => $halls])
     @endcomponent
     <script>
         var modalEdit = document.getElementById("modal_edit");
@@ -441,6 +441,7 @@
                     selectElement.value = data.category_id;
                     document.getElementById("dateEdit").value = data.date.split('T')[0];
                     document.getElementById("timeEdit").value = data.time;
+                    document.getElementById("hallEdit").value = data.hall_id;
 
                     //console.log(data);
                     var ticketPrices = data.ticket_types;
@@ -469,7 +470,7 @@
         }
     </script>
 
-    @component('events.modal_restore', ['categories' => $categories])
+    @component('events.modal_restore', ['categories' => $categories, 'halls' => $halls])
     @endcomponent
     <script>
         var modalRestore = document.getElementById("modal_restore");
@@ -502,6 +503,8 @@
                     document.querySelectorAll("[id=descriptionEdit]")[1].value = data.description;
                     document.querySelectorAll("[id=cityEdit]")[1].value = data.city;
                     document.querySelectorAll("[id=placeEdit]")[1].value = data.place;
+                    document.querySelectorAll("[id=hallEdit]").value = data.hall_id;
+
 
                     var ticketPrices = data.ticket_types;
 
@@ -604,6 +607,7 @@
                     document.getElementById("event_date").textContent = new Date(data.date).toLocaleDateString('pl-PL', options);
                     document.getElementById("event_time").textContent = data.time;
                     document.getElementById("event_categories").textContent = data.category;
+                    document.getElementById("event_hall").textContent = data.hall != null ? data.hall.name : "Brak danych";
                 });
         }
 

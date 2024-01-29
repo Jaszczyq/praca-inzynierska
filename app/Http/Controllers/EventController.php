@@ -33,7 +33,9 @@ class EventController extends Controller
             $events = Event::whereDate('date', '>=', Carbon::now())->get();
         }
 
-        return view('events.index', compact('events', 'categories', 'selectedCategory'));
+        $halls = Hall::all();
+
+        return view('events.index', compact('events', 'categories', 'selectedCategory', 'halls'));
     }
 
 
@@ -93,6 +95,7 @@ class EventController extends Controller
             'place' => 'required',
             'city' => 'required',
             'category' => 'required',
+            'hall' => 'required',
             'ticket_types.*.id' => 'sometimes|required|exists:ticket_types,id',
             'ticket_types.*.price' => 'sometimes|required|numeric|min:0',
         ]);
@@ -110,6 +113,7 @@ class EventController extends Controller
             'image' => asset('storage/' . $imagePath),
             'city' => $validatedData['city'],
             'category_id' => $validatedData['category'],
+            'hall_id' => $validatedData['hall'],
             'added_by' => Auth::user()->id,
         ]);
 
@@ -159,6 +163,7 @@ class EventController extends Controller
 
         $event->category = $event->categories->pluck('name');
         $event->ticketTypes = $event->ticketTypes->pluck('name');
+        $event->hall = $event->hall->name ?? null;
 
         //return JASON
         return response()->json($event);
@@ -244,6 +249,7 @@ class EventController extends Controller
         $event->place = $data['place'];
         $event->date = $data['date'];
         $event->time = $data['time'];
+        $event->hall_id = $data['hall'];
 
         if(isset($data['image'])) {
             $imagePath = $request->file('image')->store('public/images');
@@ -289,6 +295,7 @@ class EventController extends Controller
         $event->time = \Carbon\Carbon::parse($validatedData['date'] . ' ' . $validatedData['time'])->format('H:i:s');
         $event->image = asset('storage/' . $imagePath);
         $event->city = $validatedData['city'];
+        $event->hall_id = $request->input('hall');
 
         $event->save();
 
@@ -307,6 +314,8 @@ class EventController extends Controller
         $categories = EventCategory::all();
         $userId = Auth::user()->id;
 
+        $halls = Hall::all();
+
         try {
             $currentEventsQuery = Event::where('added_by', $userId)->whereDate('date', '>=', Carbon::now());
             $archivedEventsQuery = Event::where('added_by', $userId)->whereDate('date', '<', Carbon::now());
@@ -323,7 +332,7 @@ class EventController extends Controller
             return redirect()->route('home')->with('error', 'An error occurred.');
         }
 
-        return view('events.my_events', compact('currentEvents', 'archivedEvents', 'categories', 'selectedCategory'));
+        return view('events.my_events', compact('currentEvents', 'archivedEvents', 'categories', 'selectedCategory', 'halls'));
     }
 
     public function tickets()

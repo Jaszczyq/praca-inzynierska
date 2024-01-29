@@ -30,6 +30,12 @@ class PurchaseController extends Controller
 
     public function showSummary($event_id, $seats_ids)
     {
+        // if user is not logged in save url and redirect to login
+        if(!Auth::check()) {
+            session()->put('previous_url', url()->current());
+            return redirect()->route('login');
+        }
+
         $event = Event::find($event_id);
 
         $seats = explode(',', $seats_ids);

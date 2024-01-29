@@ -1,5 +1,5 @@
 @php use Illuminate\Support\Carbon; @endphp
-<!-- https://codepen.io/verpixelt/pen/AXBdKy -->
+<!-- https://codepen.io/verpixelt/pen/AXBdKy -->po
 <html>
     <head>
         <style>
@@ -12,7 +12,7 @@
 
             .card {
                 background: linear-gradient(to bottom, #e84c3d 0%, #e84c3d 26%, #ecedef 26%, #ecedef 100%);
-                height: 11em;
+                height: 12em;
                 float: left;
                 position: relative;
                 padding: 1em;
@@ -71,7 +71,7 @@
             }
 
             .title {
-                margin: 2em 0 0 0;
+                margin: 3em 0 0 0;
             }
 
             .name, .seat {
@@ -145,20 +145,20 @@
         @foreach($tickets as $ticket)
             @php
                 $title = $ticket->event->title;
-                $place = $ticket->event->place . ", " . $ticket->event->place;
+                $city = $ticket->event->city;
+                $place = $ticket->event->place;
                 $date = Carbon::parse($ticket->event->date)->format('d.m.Y') . " " . $ticket->event->time;
                 $row = explode('_', $ticket->seat)[0];
                 $col = explode('_', $ticket->seat)[1]
             @endphp
             <div class="cardWrap">
                 <div class="card cardLeft">
-                    <h1>Testowe <span>Kino</span></h1>
                     <div class="title">
                         <h2>{{ $title }}</h2>
                         <span>wydarzenie</span>
                     </div>
                     <div class="name">
-                        <h2>{{ $place }}</h2>
+                        <h2>{{ $city }}, {{ $place }}</h2>
                         <span>miejsce</span>
                     </div>
                     <div class="seat">

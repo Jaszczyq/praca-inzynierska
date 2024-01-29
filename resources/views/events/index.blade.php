@@ -36,6 +36,20 @@
         font-family: "Source Sans Pro", sans-serif;
         font-size: 13px;
     }
+
+    .scale-0 {
+        transform: scaleY(0);
+    }
+
+    .scale-100 {
+        transform: scaleY(1);
+    }
+
+    .checkboxList {
+        position: relative;
+        top: 20px;
+    }
+
 </style>
 @section('content')
     <div class="container">
@@ -76,7 +90,7 @@
                         </div>
                     </div>
 
-                    <div class="space-x-2 flex justify-start items-center w-full">
+                    <div class="space-x-2 flex justify-start w-fit">
                         <button onclick="toggleCheckboxList()"
                                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none mr-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 512 512" stroke="currentColor">
@@ -84,7 +98,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
                             {{ __('events.category') }}
                         </button>
-                        <div id="checkboxList" class="hidden mt-2 bg-white border rounded p-2">
+                        <div id="checkboxList" class="scale-0 absolute z-10 bg-white border rounded px-4 py-2 transition-transform duration-300 origin-top m-0" style="margin-top: 3.5rem !important;">
                             <div class="grid grid-cols-1 gap-2">
                                 @foreach($categories as $category)
                                     <div class="flex items-center ml-2 mb-2">
@@ -134,14 +148,26 @@
 
 
                 <script>
-                    function toggleCheckboxList() {
+                    /*function toggleCheckboxList() {
                         var checkboxListDiv = document.getElementById('checkboxList');
                         if (checkboxListDiv.classList.contains('hidden')) {
                             checkboxListDiv.classList.remove('hidden');
                         } else {
                             checkboxListDiv.classList.add('hidden');
                         }
+                    }*/
+
+                    function toggleCheckboxList() {
+                        var checkboxList = document.getElementById('checkboxList');
+                        if (checkboxList.classList.contains('scale-0')) {
+                            checkboxList.classList.remove('scale-0');
+                            checkboxList.classList.add('scale-100');
+                        } else {
+                            checkboxList.classList.remove('scale-100');
+                            checkboxList.classList.add('scale-0');
+                        }
                     }
+
 
                     function filterEvents() {
                         // Pobierz wszystkie kategorie
@@ -323,6 +349,7 @@
                     document.getElementById("event_date").textContent = new Date(data.date).toLocaleDateString('pl-PL', options);
                     document.getElementById("event_time").textContent = data.time;
                     document.getElementById("event_categories").textContent = data.category;
+                    document.getElementById("event_hall").textContent = data.hall.name;
 
                     /*var ticketPrices = data.ticket_prices;
 
@@ -348,7 +375,7 @@
         }
     </script>
 
-    @component('events.modal_create', ['categories' => $categories])
+    @component('events.modal_create', ['categories' => $categories, 'halls' => $halls])
     @endcomponent
     <script>
         var modal = document.getElementById("modal_create");

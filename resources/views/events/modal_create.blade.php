@@ -53,6 +53,19 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="hall"
+                               class="block text-sm font-medium text-gray-700">{{ __('events.hall') }}</label>
+                        <select name="hall" id="hall"
+                                class="mt-1 block bg-white w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                required>
+                            @if(isset($halls))
+                                @foreach($halls as $hall)
+                                    <option value="{{ $hall->id }}">{{ $hall->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="date" class="block text-sm font-medium text-gray-700">{{ __('events.date') }}</label>
                         <input type="date" name="date" id="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                     </div>

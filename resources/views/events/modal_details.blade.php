@@ -31,6 +31,10 @@
                     <p id="event_categories" class="mt-1 text-sm text-gray-600"></p>
                 </div>
                 <div class="form-group">
+                    <label class="block text-sm font-bold text-gray-700">{{__('events.hall')}}</label>
+                    <p id="event_hall" class="mt-1 text-sm text-gray-600"></p>
+                </div>
+                <div class="form-group">
                     <label class="block text-sm font-bold text-gray-700">{{__('events.city')}}</label>
                         <p id="event_city" class="mt-1 text-sm text-gray-600"></p>
                 </div>
