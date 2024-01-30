@@ -7,21 +7,21 @@
         <div class="md:flex">
             <div class="w-full p-5">
                 <div class="text-center">
-                    <h1 class="text-gray-600 font-bold text-2xl mb-1">Zwrot Biletu</h1>
+                    <h1 class="text-gray-600 font-bold text-2xl mb-1">{{ __('refunds.refund_ticket') }}</h1>
                 </div>
                 <form id="refundForm" class="mt-4" action="#">
                     @csrf
                     <input type="hidden" id="ticket_id" name="ticket_id" value="{{ $ticket->id }}" />
                     <div>
-                        <label class="block" for="ticketPrice">Cena biletu</label>
+                        <label class="block" for="ticketPrice">{{ __('refunds.ticket_price') }}</label>
                         <input type="text" placeholder="Wpisz cenę biletu" name="ticketPrice" id="ticketPrice" value="{{ $ticket->price }}" disabled class="w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:border-blue-500" />
                     </div>
                     <div class="mt-4">
-                        <label class="block" for="email">Adres Email</label>
+                        <label class="block" for="email">{{ __('refunds.email') }}</label>
                         <input type="email" placeholder="Wpisz swój adres email" name="email" id="email" value="{{ Auth::user()->email }}" disabled class="w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:border-blue-500" />
                     </div>
                     <div class="flex justify-end mt-4">
-                        <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Wyślij</button>
+                        <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">{{ __('refunds.send') }}</button>
                     </div>
                 </form>
             </div>
@@ -39,17 +39,17 @@
                 <div class="sm:flex sm:items-start">
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                         <div class="mt-2">
-                            <p class="text-sm text-gray-500">Czy aby na pewno chcesz zwrócić ten bilet?</p>
+                            <p class="text-sm text-gray-500">{{ __('refunds.refund_confirm') }}</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 <button type="button" onclick="sendRefundData()" class="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                    Zwróć
+                    {{ __('refunds.refund') }}
                 </button>
                 <button type="button" onclick="closeModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                    Anuluj
+                    {{ __('refunds.cancel') }}
                 </button>
             </div>
         </div>

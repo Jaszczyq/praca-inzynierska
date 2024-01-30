@@ -8,6 +8,7 @@ return [
     'edit' => 'Edytuj wydarzenie',
     'restore' => 'Przywróć wydarzenie',
     'delete' => 'Usuń wydarzenie',
+    'hall' => 'Sala',
     'details' => 'Szczegóły wydarzenia',
     'no_events_day' => 'Brak wydarzeń na ten dzień',
     'no_events_for_organizer' => 'Nie utrzorzono żadnych wydarzeń',

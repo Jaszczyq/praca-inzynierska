@@ -186,7 +186,7 @@
 
         window.onload = calculateTotalPrice;
 
-        $(document).ready(function () {
+        $(document).ready(function(){
             function updateButtonText() {
                 var selectedTickets = document.querySelectorAll('select[id^="select_ticket_"]');
                 var totalTickets = 0;
@@ -194,9 +194,9 @@
                     totalTickets += parseInt(selectedTickets[i].value);
                 }
                 if (totalTickets > 1) {
-                    $('#buyTicketButton').text('Kup Bilety');
+                    $('#buyTicketButton').text('Kup bilety');
                 } else {
-                    $('#buyTicketButton').text('Kup Bilet');
+                    $('#buyTicketButton').text('Kup bilet');
                 }
             }
 
@@ -206,5 +206,6 @@
             // Also call the function whenever a selection changes
             $('select[id^="select_ticket_"]').change(updateButtonText);
         });
+
     </script>
 @endsection

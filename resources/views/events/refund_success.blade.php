@@ -7,7 +7,7 @@
             <div class="md:flex">
                 <div class="w-full p-5">
                     <div class="text-center">
-                        <p>Zgłoszenie zwrotu biletu zostało wysłane do organizatora wydarzenia i czeka na jego rozpatrzenie.</p>
+                        <p>{{ __('refunds.sent') }}</p>
                     </div>
                 </div>
             </div>

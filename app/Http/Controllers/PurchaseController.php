@@ -102,7 +102,6 @@ class PurchaseController extends Controller
             $tickets[] = $ticket;
         }
 
-        // tu można zrobić wysyłkę maila
         Mail::to(Auth::user()->email)->send(new TicketMail($tickets));
 
         return view('booking.payment_status', ['payment' => $payment]);

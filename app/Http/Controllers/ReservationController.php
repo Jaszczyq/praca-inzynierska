@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TicketMail;
 use App\Models\Event;
 use App\Models\EventCategory;
+use App\Models\Payment;
+use App\Models\Reservation;
+use App\Models\Ticket;
 use App\Models\TicketType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
 {
@@ -29,4 +34,5 @@ class ReservationController extends Controller
 
         return view('booking.reservation_summary', ['event' => $event, 'selectedSeats' => $seats]);
     }
+
 }

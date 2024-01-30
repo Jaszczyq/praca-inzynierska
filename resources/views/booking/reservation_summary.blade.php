@@ -65,17 +65,17 @@
                                 <span>{{__('summary.row')}} {{ $seat_part[0] }}</span>
                                 <span style="margin-left: 10px;">{{__('summary.seat')}} {{ $seat_part[1] }}</span>
                                 <span style="margin-left: 10px;">{{__('summary.ticket_type')}}
-        <select style="border-radius: 5px; background-color: #F4F4F7;" id="select_ticket_{{$id}}" onchange="calculateTotalPrice()">
-            @php
-                $types = TicketType::all();
-                $event_ticket_prices = DB::table('event_ticket_types')->where('event_id', $event->id)->get(['id', 'price']);
-                $event_ticket_prices = array_combine($event_ticket_prices->pluck('id')->toArray(), $event_ticket_prices->pluck('price')->toArray());
+            <select style="border-radius: 5px; background-color: #F4F4F7;" id="select_ticket_{{$id}}" onchange="calculateTotalPrice()">
+                @php
+                    $types = TicketType::all();
+                    $event_ticket_prices = DB::table('event_ticket_types')->where('event_id', $event->id)->get();
+                    $event_ticket_prices = array_combine($event_ticket_prices->pluck('ticket_type_id')->toArray(), $event_ticket_prices->pluck('price')->toArray());
 
-                foreach ($types as $type) {
-                    echo '<option style="border: radius: 5px;" value="' . $type->id . '" data-price="' . ($event_ticket_prices[$type->id] ?? 0) . '">' . $type->name . '</option>';
-                }
-            @endphp
-        </select>
+                    foreach ($types as $type) {
+                        echo '<option style="border: radius: 5px;" value="' . $type->id . '" data-price="' . ($event_ticket_prices[$type->id] ?? 0) . '">' . $type->name . '</option>';
+                    }
+                @endphp
+            </select>
     </span>
                                 <span id="ticket_price_{{$id}}"
                                       style="margin-left: 10px; font-weight: bold; text-transform: uppercase">{{__('summary.pln')}}</span>
@@ -119,7 +119,7 @@
                     <h2 style="font-weight: bold; text-transform: uppercase">{{__('summary.total_price')}}</h2>
                     <h2 style="font-weight: bold; text-transform: uppercase"><span id="totalPrice"></span> {{__('summary.pln')}}</h2>
                 </div>
-                <button id="reserveTicketButton" style="width: 100%; background-color: #1E90FF; color: white; padding: 14px 20px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer;">{{__('summary.reserve_ticket')}}</button>
+                <a onclick="saveToLocalStorage()" href="{{ route('confirmation_reservation', ['id' => $event->id]) }}" class="bg-blue-600" id="reserveTicketButton" style="display: inline-block; width: 100%; color: white; padding: 14px 20px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; text-align: center;">>{{__('summary.reserve_ticket')}}</a>
                 </div>
         </div>
     </div>
@@ -172,9 +172,9 @@
                     totalTickets += parseInt(selectedTickets[i].value);
                 }
                 if (totalTickets > 1) {
-                    $('#reserveTicketButton').text('Rezerwuj Bilety');
+                    $('#reserveTicketButton').text('Rezerwuj bilety');
                 } else {
-                    $('#reserveTicketButton').text('Rezerwuj Bilet');
+                    $('#reserveTicketButton').text('Rezerwuj bilet');
                 }
             }
 

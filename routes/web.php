@@ -59,6 +59,11 @@ Route::get('/payment/{id}', function ($id) {
     return view('booking.payment', ['event' => $event]);
 })->name('payment');
 
+Route::get('/confirmation_reservation/{id}', function ($id) {
+    $event = Event::find($id);
+    return view('booking.confirmation_reservation', ['event' => $event]);
+})->name('confirmation_reservation');
+
 Route::post('/events/{event_id}/details', [DetailsController::class, 'show']);
 Route::get('/seats/{event_id}/{seats}', [SeatController::class, 'show']);
 

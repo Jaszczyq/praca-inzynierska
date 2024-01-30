@@ -155,23 +155,23 @@
                 <div class="card cardLeft">
                     <div class="title">
                         <h2>{{ $title }}</h2>
-                        <span>wydarzenie</span>
+                        <span>{{ __('ticket.event') }}</span>
                     </div>
                     <div class="name">
                         <h2>{{ $city }}, {{ $place }}</h2>
-                        <span>miejsce</span>
+                        <span>{{ __('ticket.location') }}</span>
                     </div>
                     <div class="seat">
                         <h2>{{ $row }}</h2>
-                        <span>Rząd</span>
+                        <span>{{ __('ticket.row') }}</span>
                     </div>
                     <div class="time">
                         <h2>{{ $col }}</h2>
-                        <span>Miejsce</span>
+                        <span>{{ __('ticket.seat') }}</span>
                     </div>
                     <div class="time">
                         <h2>{{ $date }}</h2>
-                        <span>Data</span>
+                        <span>{{ __('ticket.date1') }}</span>
                     </div>
 
                 </div>
@@ -179,7 +179,7 @@
                     <div class="eye"></div>
                     <div class="number">
                         <h3>{{ $row }}/{{ $col }}</h3>
-                        <span>Rząd/miejsce</span>
+                        <span>{{ __('ticket.row_seat') }}</span>
                     </div>
                     <div class="barcode"></div>
                 </div>
