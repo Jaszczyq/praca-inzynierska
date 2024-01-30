@@ -146,7 +146,21 @@
             </div>
         </form>
     </div>
-    <div id="cinemaHall"></div>
+    <div class="hallContainer" style="position: relative;">
+        <div id="cinemaHall"></div>
+        <!--canvas id="hallCanvas" style="position: absolute; z-index: -1; top: 0; left: 0; width: 100%; height: 100%;"></canvas-->
+    </div>
+
+    <div id="dropdownDelay" class="hidden z-10 divide-y rounded-lg shadow w-44 bg-gray-700 divide-gray-600">
+        <ul class="py-2 text-sm text-gray-200" aria-labelledby="dropdownDelayButton">
+            <li>
+                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onclick="assingToSection()">Przypisz do sekcji</a>
+            </li>
+            <li>
+                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Usuń</a>
+            </li>
+        </ul>
+    </div>
 
     <script>
         document.querySelectorAll('input[name="option"]').forEach(input => {
@@ -196,6 +210,46 @@
 
                 clearHall();
 
+                if(json_template.hallData) {
+                    var sections = json_template.sections;
+
+                    const sectionList = document.getElementById('sectionList');
+
+                    for (let i = 0; i < sections.length; i++) {
+                        const s = sections[i];
+                        const sectionRow = document.createElement('div');
+                        sectionRow.className = 'flex items-center mb-2 bg-gray-100 p-2 rounded hover:bg-gray-200 cursor-pointer';
+                        sectionRow.style.backgroundColor = s.color;
+                        sectionRow.id = s.id;
+                        sectionRow.onclick = (e) => {
+                            if (e.target.tagName === 'INPUT') return;
+                            if (selectedSection && selectedSection !== sectionRow) {
+                                selectedSection.classList.remove('bg-gray-300');
+                            }
+                            selectedSection = sectionRow;
+                            sectionRow.classList.add('bg-gray-300');
+                            addSectionToSeats(selectedSeats, sectionRow);
+                        };
+
+                        const nameInput = document.createElement('input');
+                        nameInput.className = 'shadow appearance-none border rounded py-2 px-3 text-gray-700 mr-2';
+                        nameInput.placeholder = 'Nazwa sekcji';
+                        nameInput.value = s.name;
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Usuń';
+                        deleteButton.className = 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded';
+                        deleteButton.onclick = () => sectionList.removeChild(sectionRow);
+
+                        sectionRow.appendChild(nameInput);
+                        sectionRow.appendChild(deleteButton);
+
+                        sectionList.appendChild(sectionRow);
+                    }
+
+                    json_template = json_template.hallData;
+                }
+
                 var rows = json_template.length;
 
                 for (let i = 0; i < rows; i++) {
@@ -206,11 +260,15 @@
                     for (let j = 0; j < seats.length; j++) {
                         var seat = createButton(seats[j].left);
 
+                        seat.dataset.section = seats[j].section ? seats[j].section : null;
+
                         row.appendChild(seat);
                     }
                 }
 
                 loadedHallId = hallId;
+
+                generateGrid();
             });
         }
 
@@ -280,6 +338,11 @@
             return false;
         }
 
+        function assignToSection(event) {
+            event.preventDefault();
+            openSectionModal();
+        }
+
         function generateJson() {
             // get all seats with left position and row number, sort by left position desc
             const rows = document.querySelectorAll('.row');
@@ -298,6 +361,7 @@
 
                     rowJson.push({
                         left: parseInt(seat.style.left),
+                        section: seat.dataset.section !== undefined ? seat.dataset.section : null
                     });
                 }
 
@@ -311,7 +375,24 @@
                 })
             }
 
-            return json;
+            var fullData = {
+                hallData: json,
+                sections: []
+            }
+
+            const sections = document.querySelectorAll('[id^="section_"]');
+
+            for (let i = 0; i < sections.length; i++) {
+                const section = sections[i];
+
+                fullData.sections.push({
+                    id: section.id,
+                    name: section.querySelector('input').value,
+                    color: section.style.backgroundColor
+                });
+            }
+
+            return fullData;
         }
 
         function findBestPosition(posX, collisions) {
@@ -369,6 +450,10 @@
 
             rowDiv.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
+
+                // check if target is a seat or is  img
+                if (e.target.classList.contains('seat') || e.target.tagName === 'IMG') return;
+
                 insertSeat(rowDiv);
             });
 
@@ -411,6 +496,15 @@
                 seatButton.classList.add('dragging');
             });
 
+            seatButton.addEventListener('contextmenu', function(event) {
+                event.preventDefault();
+                document.getElementById('dropdownDelay').classList.remove('hidden');
+
+                document.getElementById('dropdownDelay').style.left = event.pageX + 'px';
+                document.getElementById('dropdownDelay').style.top = event.pageY + 'px';
+                document.getElementById('dropdownDelay').style.position = 'absolute';
+            })
+
             const seatContainer = document.createElement('div');
             seatContainer.classList.add('seat_container');
 
@@ -426,6 +520,7 @@
 
         function openSectionModal() {
             document.getElementById('sectionDialog').style.display = 'block';
+            generateGrid();
         }
 
         document.getElementById('loadHallButton').addEventListener('click', function(e) {
@@ -514,6 +609,10 @@
         });
 
         window.addEventListener('mousedown', function(e) {
+            // if target is inside #cinemaHallForm or one of its children ignore event
+            if (e.target.closest('#cinemaHallForm') || e.target.closest('#cinemaHall') || e.target.closest('#sectionDialog') || e.target.closest('#errorPopup')) {
+                return;
+            }
             isSelecting = true;
             selectionBox = document.createElement('div');
             selectionBox.style.position = 'absolute';
@@ -538,6 +637,8 @@
             for (let i = 0; i < seats.length; i++) {
                 seats[i].classList.remove('selected');
             }
+
+            document.getElementById('dropdownDelay').classList.add('hidden');
         });
 
         window.addEventListener('mousemove', function(event) {
@@ -610,5 +711,6 @@
     <!--
     <script src="node_modules/flowbite/dist/flowbite.min.js"></script> -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('js/hexToRGB.js') }}"></script>
 
 @endsection

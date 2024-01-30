@@ -14,4 +14,8 @@ return [
     'payment_status_description' => 'Status płatności',
     'reserve' => 'Rezerwuj',
     'buy_tickets' => 'Kup bilety',
+    'buy_ticket' => 'Kup bilet',
+    'reserve_tickets' => 'Rezerwuj bilety',
+    'reserve_ticket' => 'Rezerwuj bilet',
+
 ];

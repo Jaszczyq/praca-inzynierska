@@ -119,7 +119,7 @@
                     <h2 style="font-weight: bold; text-transform: uppercase">{{__('summary.total_price')}}</h2>
                     <h2 style="font-weight: bold; text-transform: uppercase"><span id="totalPrice"></span> {{__('summary.pln')}}</h2>
                 </div>
-                <a onclick="saveToLocalStorage()" href="{{ route('confirmation_reservation', ['id' => $event->id]) }}" class="bg-blue-600" id="reserveTicketButton" style="display: inline-block; width: 100%; color: white; padding: 14px 20px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; text-align: center;">>{{__('summary.reserve_ticket')}}</a>
+                <a onclick="saveToLocalStorage()" href="{{ route('confirmation_reservation', ['id' => $event->id]) }}" class="bg-blue-600" id="reserveTicketButton" style="display: inline-block; width: 100%; color: white; padding: 14px 20px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; text-align: center;">{{__('summary.reserve_ticket')}}</a>
                 </div>
         </div>
     </div>
@@ -164,7 +164,7 @@
 
         window.onload = calculateTotalPrice;
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             function updateButtonText() {
                 var selectedTickets = document.querySelectorAll('select[id^="select_ticket_"]');
                 var totalTickets = 0;
@@ -172,16 +172,14 @@
                     totalTickets += parseInt(selectedTickets[i].value);
                 }
                 if (totalTickets > 1) {
-                    $('#reserveTicketButton').text('Rezerwuj bilety');
+                    $('#buyTicketButton').text('{{ __('booking.reserve_tickets') }}');
                 } else {
-                    $('#reserveTicketButton').text('Rezerwuj bilet');
+                    $('#buyTicketButton').text('{{ __('booking.reserve_ticket') }}');
                 }
             }
 
-            // Call the function initially
             updateButtonText();
 
-            // Also call the function whenever a selection changes
             $('select[id^="select_ticket_"]').change(updateButtonText);
         });
     </script>

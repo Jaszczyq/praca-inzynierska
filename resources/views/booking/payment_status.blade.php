@@ -1,3 +1,4 @@
+@php use App\Models\Event; @endphp
 @extends('layouts.app')
 
 @section('content')
@@ -18,16 +19,26 @@
                     6 => ['name' => 'Odrzucona', 'color' => 'bg-red-500'],
                     7 => ['name' => 'Nowa', 'color' => 'bg-purple-500']
                 ];
-            @endphp
+        @endphp
 
-            <div class="text-center">
-                <span class="font-semibold">{{ __('booking.payment_status_description') }}</span>
-                <div class="mt-2">
-                    <span class="inline-block rounded-full text-white px-3 py-1 text-sm font-semibold {{ $statuses[$payment->status]['color'] }}">
-                        {{ $statuses[$payment->status]['name'] }}
-                    </span>
-                </div>
+        <div class="text-center">
+            <span class="font-semibold">{{ __('booking.payment_status_description') }}</span>
+            <div class="mt-2">
+                <span class="inline-block rounded-full text-white px-3 py-1 text-sm font-semibold {{ $statuses[$payment->status]['color'] }}">
+                    {{ $statuses[$payment->status]['name'] }}
+                </span>
             </div>
         </div>
     </div>
+</div>
+@if ($payment->status === 3)
+    @php
+        $event_id = json_decode($payment->details)[0]->event_id;
+    @endphp
+    <script>
+        var timer = setTimeout(function() {
+            window.location='{{ route('confirmation_purchase', ['id' => $event_id]) }}}'
+        }, 5000);
+    </script>
+@endif
 @endsection

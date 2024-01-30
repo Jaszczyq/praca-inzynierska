@@ -9,6 +9,7 @@ use App\Http\Controllers\RefundController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SeatController;
 use App\Models\Event;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -61,8 +62,25 @@ Route::get('/payment/{id}', function ($id) {
 
 Route::get('/confirmation_reservation/{id}', function ($id) {
     $event = Event::find($id);
+
+    // get seats from session
+    $seats = session('selectedSeats');
+    $seats_ids = explode(',', $seats);
+
+    for ($i = 0; $i < count($seats_ids); $i++) {
+        $reservation = new \App\Models\Reservation();
+        $reservation->event_id = $event->id;
+        $reservation->seat = $seats_ids[$i];
+        $reservation->save();
+    }
+
     return view('booking.confirmation_reservation', ['event' => $event]);
 })->name('confirmation_reservation');
+
+Route::get('/confirmation_purchase/{id}', function ($id) {
+    $event = Event::find($id);
+    return view('booking.confirmation_purchase', ['event' => $event]);
+})->name('confirmation_purchase');
 
 Route::post('/events/{event_id}/details', [DetailsController::class, 'show']);
 Route::get('/seats/{event_id}/{seats}', [SeatController::class, 'show']);

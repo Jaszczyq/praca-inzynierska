@@ -30,6 +30,8 @@ class ReservationController extends Controller
     {
         $event = Event::find($event_id);
 
+        session(['selectedSeats' => $seats_ids]);
+
         $seats = explode(',', $seats_ids);
 
         return view('booking.reservation_summary', ['event' => $event, 'selectedSeats' => $seats]);

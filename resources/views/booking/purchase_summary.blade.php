@@ -186,7 +186,7 @@
 
         window.onload = calculateTotalPrice;
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             function updateButtonText() {
                 var selectedTickets = document.querySelectorAll('select[id^="select_ticket_"]');
                 var totalTickets = 0;
@@ -194,16 +194,14 @@
                     totalTickets += parseInt(selectedTickets[i].value);
                 }
                 if (totalTickets > 1) {
-                    $('#buyTicketButton').text('Kup bilety');
+                    $('#buyTicketButton').text('{{ __('booking.buy_tickets') }}');
                 } else {
-                    $('#buyTicketButton').text('Kup bilet');
+                    $('#buyTicketButton').text('{{ __('booking.buy_ticket') }}');
                 }
             }
 
-            // Call the function initially
             updateButtonText();
 
-            // Also call the function whenever a selection changes
             $('select[id^="select_ticket_"]').change(updateButtonText);
         });
 

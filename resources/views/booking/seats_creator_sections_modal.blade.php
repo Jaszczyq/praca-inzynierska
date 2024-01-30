@@ -1,11 +1,12 @@
 <style>
     .grid-row {
         display: flex;
+        height: 35px;
     }
 
     .grid-seat {
-        width: 40px;
-        padding-top: 40px;
+        width: 35px;
+        padding-top: 35px;
         position: relative;
         border: 1px solid #ddd;
     }
@@ -45,7 +46,7 @@
             </div>
 
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button onclick="generatePreview()" class="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                <button onclick="saveSections()" class="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
                     {{ __('creator.generate_preview') }}
                 </button>
                 <button onclick="closeSectionModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
@@ -74,44 +75,33 @@
         return color;
     }
 
+    function addSectionToSeats(seats, section) {
+        for (let i = 0; i < seats.length; i++) {
+            seats[i].dataset.section = section.id;
+        }
+        generateGrid();
+    }
+
     function addSectionToModal() {
         const sectionList = document.getElementById('sectionList');
 
         const sectionRow = document.createElement('div');
         sectionRow.className = 'flex items-center mb-2 bg-gray-100 p-2 rounded hover:bg-gray-200 cursor-pointer';
         sectionRow.style.backgroundColor = generateRandomColor();
-        sectionRow.onclick = () => {
+        sectionRow.id = "section_" + sectionList.children.length;
+        sectionRow.onclick = (e) => {
+            if (e.target.tagName === 'INPUT') return;
             if (selectedSection && selectedSection !== sectionRow) {
-                selectedSection.classList.remove('bg-gray-300')
+                selectedSection.classList.remove('bg-gray-300');
             }
-            selectedSection = sectionRow
-            sectionRow.classList.add('bg-gray-300')
-            calculateActiveGridFields();
+            selectedSection = sectionRow;
+            sectionRow.classList.add('bg-gray-300');
+            addSectionToSeats(selectedSeats, sectionRow);
         };
 
         const nameInput = document.createElement('input');
         nameInput.className = 'shadow appearance-none border rounded py-2 px-3 text-gray-700 mr-2';
         nameInput.placeholder = 'Nazwa sekcji';
-
-        const seatsInput = document.createElement('input');
-        seatsInput.type = 'number';
-        seatsInput.className = 'shadow appearance-none border rounded py-2 px-3 text-gray-700 mr-2';
-        seatsInput.placeholder = 'Ilość siedzeń';
-        seatsInput.name = 'section_seats';
-        seatsInput.oninput = () => {
-            var dimensions = calculateGridDimensions();
-            generateGrid(dimensions[1], dimensions[0]);
-        }
-
-        const rowsInput = document.createElement('input');
-        rowsInput.type = 'number';
-        rowsInput.className = 'shadow appearance-none border rounded py-2 px-3 text-gray-700 mr-2';
-        rowsInput.placeholder = 'Ilość rzędów';
-        rowsInput.name = 'section_rows';
-        rowsInput.oninput = () => {
-            var dimensions = calculateGridDimensions();
-            generateGrid(dimensions[1], dimensions[0]);
-        }
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Usuń';
@@ -119,53 +109,111 @@
         deleteButton.onclick = () => sectionList.removeChild(sectionRow);
 
         sectionRow.appendChild(nameInput);
-        sectionRow.appendChild(seatsInput);
-        sectionRow.appendChild(rowsInput);
         sectionRow.appendChild(deleteButton);
 
         sectionList.appendChild(sectionRow);
     }
 
-    function calculateGridDimensions() {
-        const seatsInputs = document.getElementsByName('section_seats');
-        const rowsInputs = document.getElementsByName('section_rows');
+    var colorCache = [];
 
-        //console.log(seatsInputs, rowsInputs);
+    function drawSections() {
+        const seats = document.querySelectorAll('.seat');
+        /*const canvas = document.getElementById('hallCanvas');
+        const ctx = canvas.getContext('2d');
 
-        if (seatsInputs.length === 0) {
-            return;
-        }
+        ctx.fillStyle = 'red';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        var totalSeats = 0;
-        var totalRows = 0;
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);*/
 
-        for (var i = 0; i < seatsInputs.length; i++) {
-            totalSeats += parseInt(seatsInputs[i].value);
-            totalRows += parseInt(rowsInputs[i].value);
-        }
+        seats.forEach(seat => {
+            const sectionId = seat.dataset.section;
+            if (sectionId) {
+                try {
+                    const sectionElement = document.getElementById(sectionId);
+                    const rgb = sectionElement.style.backgroundColor
+                        .match(/\d+/g)
+                        .map(x => parseInt(x));
 
-        return [totalSeats, totalRows];
+                    seat.style.backgroundColor = "rgba(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ", 0.5)";
+                }
+                catch (e) {
+
+                }
+                //console.log(seat);
+
+                /*if (!colorCache[sectionElement.style.backgroundColor]) {
+                    const rgb = sectionElement.style.backgroundColor
+                        .match(/\d+/g)
+                        .map(x => parseInt(x));
+
+                    const color = new Color(rgb[0], rgb[1], rgb[2]);
+                    const solver = new Solver(color);
+                    const result = solver.solve();
+                    const filter = result.filter.replace("filter: ", "").replace(";", "");
+                    console.log(filter);
+                    seat.style.filter = filter;
+                    console.log(seat);
+
+                    colorCache[sectionElement.style.backgroundColor] = filter;
+                }
+
+                seat.style.filter = colorCache[sectionElement.style.backgroundColor];*/
+
+                /*const x = seat.offsetLeft;
+                const y = seat.offsetTop;
+
+                console.log(x, y);
+                console.log(seat.offsetWidth, seat.offsetHeight);
+
+                // Rysowanie obszaru sekcji
+                ctx.fillStyle = color;
+                ctx.globalAlpha = 0.5; // Ustaw przezroczystość
+                ctx.fillRect(x, y, seat.offsetWidth, seat.offsetHeight);*/
+            }
+        });
     }
 
-    function generateGrid(maxRows, maxSeats) {
+    function generateGrid() {
         const gridContainer = document.getElementById('sectionGrid');
         gridContainer.innerHTML = '';
+
+        var rows = document.querySelectorAll('.row');
+
+        maxRows = rows.length;
 
         for (let row = 0; row < maxRows; row++) {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'grid-row';
 
-            for (let seat = 0; seat < maxSeats; seat++) {
+            var width = rows[row].offsetWidth;
+
+            var seats = rows[row].querySelectorAll('.seat');
+
+            for (let seat = 0; seat < seats.length; seat++) {
                 const seatDiv = document.createElement('div');
                 seatDiv.className = 'grid-seat';
                 seatDiv.dataset.x = row;
                 seatDiv.dataset.y = seat;
+                seatDiv.style.position = 'absolute';
+                seatDiv.style.left = (seats[seat].offsetLeft/width)*100 + '%';
+
+                if(seats[seat].dataset.section) {
+                    try {
+                        seatDiv.style.backgroundColor = document.getElementById(seats[seat].dataset.section).style.backgroundColor;
+                    }
+                    catch (e) {
+
+                    }
+                }
 
                 rowDiv.appendChild(seatDiv);
             }
 
             gridContainer.appendChild(rowDiv);
         }
+
+        drawSections();
     }
 
     function colorGridFields(x, y, width, height, color) {
@@ -191,59 +239,17 @@
         if(colorize) {
             for (let i = x; i < x + width; i++) {
                 for (let j = y; j < y + height; j++) {
-                    const seatDiv = gridContainer.children[i].children[j];
+                    try {
+                        const seatDiv = gridContainer.children[i].children[j];
 
-                    if(seatDiv.style.backgroundColor == color) {
-                        seatDiv.style.backgroundColor = null;
-                    }
-                    else {
-                        seatDiv.style.backgroundColor = color;
-                    }
-                }
-            }
-        }
-    }
-
-    function isAreaFree(x, y, width, height, gridContainer, currentSectionColor = null) {
-        // for (let i = x; i < x + width; i++) {
-        //     for (let j = y; j < y + height; j++) {
-        //         if (i >= gridContainer.children.length || j >= gridContainer.children[i].children.length) {
-        //             return false;
-        //         }
-        //         const seatDiv = gridContainer.children[i].children[j];
-        //         if (seatDiv.style.backgroundColor && seatDiv.style.backgroundColor !== 'transparent' && seatDiv.style.backgroundColor !== currentSectionColor) {
-        //             return false;
-        //         }
-        //     }
-        // }
-        return true;
-    }
-
-    function calculateActiveGridFields() {
-        var selectedSectionRows = selectedSection.querySelector('[name=section_rows]').value;
-        var selectedSectionSeats = selectedSection.querySelector('[name=section_seats]').value;
-
-        const allSeats = document.getElementById('sectionGrid').querySelectorAll('.grid-seat');
-
-        allSeats.forEach(seat => {
-            seat.classList.remove('active', 'selected');
-            seat.onclick = null;
-        });
-
-        var dimensions = calculateGridDimensions();
-        var rows = dimensions[1];
-        var seats = dimensions[0];
-
-        var sectionColor = selectedSection.style.backgroundColor;
-
-        for (let i = 0; i < rows; i++) {
-            for (let j = 0; j < seats; j++) {
-                if (i <= selectedSectionRows && j <= selectedSectionSeats) {
-                    if(isAreaFree(i, j, parseInt(selectedSectionRows), parseInt(selectedSectionSeats), document.getElementById('sectionGrid'), sectionColor)) {
-                        allSeats[i * seats + j].classList.add('active');
-                        allSeats[i * seats + j].onclick = () => {
-                            colorGridFields(i, j, parseInt(selectedSectionRows), parseInt(selectedSectionSeats), sectionColor);
+                        if (seatDiv.style.backgroundColor == color) {
+                            seatDiv.style.backgroundColor = null;
+                        } else {
+                            seatDiv.style.backgroundColor = color;
                         }
+                    }
+                    catch (e) {
+                        console.log(e);
                     }
                 }
             }
