@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'reset' => 'Your password has been reset.',
+    'reset' => 'Twoje hasło zostało zresetowane',
     'sent' => 'Wysłaliśmy link do resetowania hasła na twój adres e-mail',
     'throttled' => 'Poczekaj chwilę przed ponowną próbą',
     'token' => 'This password reset token is invalid.',

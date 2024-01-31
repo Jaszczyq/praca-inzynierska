@@ -349,11 +349,6 @@ class EventController extends Controller
 
     public function sortTickets($by, $order)
     {
-        /*$tickets = Ticket::with(['event' => function ($query) use ($by, $order) {
-            $query->orderBy($by, $order);
-        }])
-            ->where('user_id', Auth::user()->id)
-            ->get();*/
         $tickets = Ticket::join('events', 'events.id', '=', 'tickets.event_id')
             ->where('user_id', Auth::user()->id)
             ->orderBy("events.".$by, $order)

@@ -249,6 +249,18 @@
 
                     clearHall();
 
+                    var sections = {};
+
+                    if(json_template.hallData) {
+                        for (const section in json_template.sections) {
+                            sections[json_template.sections[section].id] = json_template.sections[section];
+                        }
+
+                        console.log(sections);
+
+                        json_template = json_template.hallData;
+                    }
+
                     var rows = json_template.length;
 
                     for (let i = 0; i < rows; i++) {
@@ -264,6 +276,18 @@
                             var seat = createButton(seats[j].left);
                             var seat_container = seat.querySelector(".seat_container");
                             seat_container.innerHTML = '<span id="seat_nr_'+(i+1)+'_'+(j+1)+'" style="color: white !important;">'+(j+1)+'</span>' + seat_container.innerHTML;
+
+                            seat.dataset.section = seats[j].section ? seats[j].section : null;
+
+                            if(seat.dataset.section !== "null") {
+                                console.log(seat.dataset.section);
+                                var section = sections[seat.dataset.section];
+                                const rgb = section.color
+                                    .match(/\d+/g)
+                                    .map(x => parseInt(x));
+
+                                seat_container.style.backgroundColor = "rgba(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ", 0.5)";
+                            }
 
                             row.appendChild(seat);
                         }
