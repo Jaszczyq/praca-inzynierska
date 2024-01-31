@@ -52,17 +52,13 @@
                             <!-- First search bar -->
                             <div class="relative mt-1 flex-1">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg"
+                                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                          fill="none" viewBox="0 0 20 20">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                               stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                     </svg>
                                 </div>
-                                <input type="text" id="search-title"
-                                       class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 w-full"
-                                       placeholder="{{ __('events.search_title') }}"
-                                       style="padding-left:35px !important;">
+                                <input type="text" id="search-title" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 w-full" placeholder="{{ __('events.search_title') }}" style="padding-left:35px !important;">
                             </div>
                             <!-- Second search bar -->
                             <div class="relative mt-1 flex-1">
@@ -75,11 +71,46 @@
                                             d="M480 48c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48V96H224V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V96H112V24c0-13.3-10.7-24-24-24S64 10.7 64 24V96H48C21.5 96 0 117.5 0 144v96V464c0 26.5 21.5 48 48 48H304h32 96H592c26.5 0 48-21.5 48-48V240c0-26.5-21.5-48-48-48H480V48zm96 320v32c0 8.8-7.2 16-16 16H528c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16zM240 416H208c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16zM128 400c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32zM560 256c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H528c-8.8 0-16-7.2-16-16V272c0-8.8 7.2-16 16-16h32zM256 176v32c0 8.8-7.2 16-16 16H208c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16zM112 160c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h32zM256 304c0 8.8-7.2 16-16 16H208c-8.8 0-16-7.2-16-16V272c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32zM112 320H80c-8.8 0-16-7.2-16-16V272c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16zm304-48v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V272c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16zM400 64c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V80c0-8.8 7.2-16 16-16h32zm16 112v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16z"/>
                                     </svg>
                                 </div>
-                                <input type="text" id="search-city"
-                                       class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 w-full"
-                                       placeholder="{{ __('events.search_city') }}"
-                                       style="padding-left:35px !important;">
+                                <input type="text" id="search-city" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 w-full" placeholder="{{ __('events.search_city') }}" style="padding-left:35px !important;">
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="space-x-2 flex justify-start w-fit">
+                        <button onclick="toggleCheckboxList()"
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 512 512" stroke="currentColor">
+                                <!-- Zastąp poniższe ścieżki odpowiednimi dla Twojego SVG -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
+                            {{ __('events.category') }}
+                        </button>
+                        <div id="checkboxList" class="scale-0 absolute z-10 bg-white border rounded px-4 py-2 transition-transform duration-300 origin-top m-0" style="margin-top: 3.5rem !important;">
+                            <div class="grid grid-cols-1 gap-2">
+                                @foreach($categories as $category)
+                                    <div class="flex items-center ml-2 mb-2">
+                                        <input type="checkbox" id="category_{{ $category->id }}" name="categories[]"
+                                               value="{{ $category->id }}" onchange="filterEvents()">
+                                        <label for="category_{{ $category->id }}"
+                                               class="ml-2 text-sm font-medium text-gray-900">{{ $category->name }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="flex justify-start items-center w-full">
+                            <select name="sort" id="sort"
+                                    class="mr-2 min-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                                    onchange="sort()">
+                                <option value="date" selected="">{{ __('events.sort_date') }}</option>
+                                <option value="title">{{ __('events.sort_title') }}</option>
+                                <option value="city">{{ __('events.sort_city') }}</option>
+                            </select>
+                            <select name="order" id="order"
+                                    class="w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                                    onchange="sort()">
+                                <option value="asc" selected="">&#x25B2; {{ __('events.sort_up') }}</option>
+                                <option value="desc">&#x25BC; {{ __('events.sort_down') }}</option>
+                            </select>
                         </div>
                     </div>
 
@@ -87,65 +118,29 @@
                         <button type="button"
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700focus:outline-none dark:focus:ring-blue-800"
                                 onclick="openModal(); document.querySelector('.dropdown-menu.dropdown-menu-end').style.display = 'none'; event.preventDefault();">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white"
+                                     viewBox="0 0 448 512">
+                                    <path
+                                        fill="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
+                                </svg>
+                            </div>
                             <span class="pl-2">{{ __('events.create') }}</span>
                         </button>
                     @endcan
                 </div>
 
-                <div class="p-6 space-y-4">
-                    <div class="pb-4 bg-white">
-                        <label for="table-search" class="sr-only"></label>
-
-                        <div class="space-x-2 flex justify-start items-center w-full">
-                            <button onclick="toggleCheckboxList()"
-                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4 mr-2"
-                                     fill="currentColor" viewBox="0 0 512 512" stroke="currentColor">
-                                    <!-- Zastąp poniższe ścieżki odpowiednimi dla Twojego SVG -->
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/>
-                                </svg>
-                                {{ __('events.category') }}
-                            </button>
-                            <div id="checkboxList" class="hidden mt-2 bg-white border rounded p-2">
-                                <div class="grid grid-cols-2 gap-2">
-                                    @foreach($categories as $category)
-                                        <div class="flex items-center ml-2 mb-2">
-                                            <input type="checkbox" id="category_{{ $category->id }}" name="categories[]"
-                                                   value="{{ $category->id }}" onchange="filterEvents()">
-                                            <label for="category_{{ $category->id }}"
-                                                   class="ml-2 text-sm font-medium text-gray-900">{{ $category->name }}</label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <div class="flex justify-start items-center w-full">
-                                <select name="sort" id="sort"
-                                        class="mr-2 min-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                                        onchange="sort()">
-                                    <option value="date" selected="">{{ __('events.sort_date') }}</option>
-                                    <option value="title">{{ __('events.sort_title') }}</option>
-                                    <option value="city">{{ __('events.sort_city') }}</option>
-                                </select>
-                                <select name="order" id="order"
-                                        class="w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                                        onchange="sort()">
-                                    <option value="asc" selected="">&#x25B2; {{ __('events.sort_up') }}</option>
-                                    <option value="desc">&#x25BC; {{ __('events.sort_down') }}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <script>
                     function toggleCheckboxList() {
-                        var checkboxListDiv = document.getElementById('checkboxList');
-                        if (checkboxListDiv.classList.contains('hidden')) {
-                            checkboxListDiv.classList.remove('hidden');
+                        var checkboxList = document.getElementById('checkboxList');
+                        if (checkboxList.classList.contains('scale-0')) {
+                            checkboxList.classList.remove('scale-0');
+                            checkboxList.classList.add('scale-100');
                         } else {
-                            checkboxListDiv.classList.add('hidden');
+                            checkboxList.classList.remove('scale-100');
+                            checkboxList.classList.add('scale-0');
                         }
                     }
 

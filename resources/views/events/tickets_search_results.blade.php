@@ -87,7 +87,7 @@
                         <div>Bilet {{ $ticket->ticketType->name }}, <b>{{ $event->price }} zł</b></div>
                         <!-- check if time to event is more than 30 minutes -->
                         @if(\Carbon\Carbon::parse(explode(' ', $event->date)[0] . ' ' . $event->time)->diffInMinutes(\Carbon\Carbon::now()) > 30)
-                            <a href="{{ route('tickets.refund', ['id' => $ticket->id]) }}"
+                            <a href="{{ route('tickets.refund', ['ticket_id' => $ticket->id]) }}"
                                class="btn btn-primary">{{ __('events.refund') }}</a>
                         @endif
                     </div>
@@ -97,5 +97,5 @@
     </div>
 
 @empty
-    <p class="text-center">{{ __('events.no_events_day') }}</p>
+    <p class="text-center">{{ __('events.no_events_search') }}</p>
 @endforelse

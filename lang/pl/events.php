@@ -10,7 +10,7 @@ return [
     'delete' => 'Usuń wydarzenie',
     'hall' => 'Sala',
     'details' => 'Szczegóły wydarzenia',
-    'no_events_day' => 'Brak wydarzeń na ten dzień',
+    'no_events_day' => 'Brak wydarzeń o podanych kryteriach wyszukiwania',
     'no_events_for_organizer' => 'Nie utrzorzono żadnych wydarzeń',
     'no_events_search_name' => 'Brak wydarzeń o podanej nazwie',
     'date' => 'Data wydarzenia',
@@ -34,6 +34,7 @@ return [
     'confirm_delete' => 'Czy na pewno chcesz usunąć wydarzenie',
     'confirm' => 'Tak',
     'cancel' => 'Nie',
+    'no_events_search' => 'Brak wydarzeń o podanych kryteriach wyszukiwania',
 
     'sort_date' => 'Sortuj po dacie',
     'sort_title' => 'Sortuj po tytule',

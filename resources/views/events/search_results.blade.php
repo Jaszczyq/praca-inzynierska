@@ -90,5 +90,5 @@
     </div>
 
 @empty
-    <p class="text-center">{{ __('events.no_events_day') }}</p>
+    <p class="text-center">{{ __('events.no_events_search') }}</p>
 @endforelse

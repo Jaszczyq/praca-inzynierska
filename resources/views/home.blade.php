@@ -97,6 +97,17 @@
                     document.getElementById("event_date").textContent = new Date(data.date).toLocaleDateString('pl-PL', options);
                     document.getElementById("event_time").textContent = data.time;
                     document.getElementById("event_categories").textContent = data.category;
+                    document.getElementById("event_hall").textContent = data.hall.name;
+
+                    /*var ticketPrices = data.ticket_prices;
+
+                    for (var i = 0; i < ticketPrices.length; i++) {
+                        var ticketTypeId = ticketPrices[i].id;
+                        var ticketValue = ticketPrices[i].pivot.price;
+
+                        document.getElementById("ticket_types[" + ticketTypeId + "][price]").value = ticketValue;
+                    }*/
+
                     currentBuyUrl = buyUrlTemplate.replace(':id', id);
                 });
         }
